@@ -28,7 +28,7 @@ public class MainActivity extends FragmentActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    firebaseRef = new Firebase(FIREBASE_URL).child("Holman");
+    firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
     firebaseRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {

@@ -1,13 +1,14 @@
 package com.launch.twinkle.twinkle.models;
 
-public class User {
+public class User extends AbstractModel {
 
-  private String id; // This is actually the facebook-id
   private String firstName;
   private String lastName;
 
-  // Required default constructor for Firebase object mapping
-  private User() {
+  public User(String id, String firstName, String lastName) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
   }
 
   public String getLastName() {
@@ -20,6 +21,10 @@ public class User {
 
   public String getId() {
     return id;
+  }
+
+  @Override protected String getTableName() {
+    return "users";
   }
 
 }
