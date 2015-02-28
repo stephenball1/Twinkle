@@ -1,6 +1,7 @@
 package com.launch.twinkle.twinkle;
 
 import com.launch.twinkle.twinkle.models.Message;
+import com.launch.twinkle.twinkle.models.MessageList;
 
 import android.support.v4.app.Fragment;
 import android.database.DataSetObserver;
@@ -27,7 +28,12 @@ public class ChatFragment extends ListFragment {
   private MessageListAdapter mMessageListAdapter;
   private LayoutInflater mInflater;
   private ValueEventListener mConnectedListener;
-  
+  private String chatId;
+
+  public ChatFragment(String chatId) {
+    this.chatId = chatId;
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
@@ -51,6 +57,10 @@ public class ChatFragment extends ListFragment {
       Message message = new Message("", ApplicationState.getLoggedInUserId(), value);
       message.create();
 
+      // Add it to this list
+      MessageList messageList = new MessageList(chatId);
+      messageList.pushToChildList("messageIds", message.getId());
+
       input.setText("");
     }
   }
@@ -58,6 +68,9 @@ public class ChatFragment extends ListFragment {
   @Override
   public void onStart() {
     super.onStart();
+
+    // TODO plug this in
+    String messageKey = "messagesList/" + chatId;
     this.mFirebaseRef = new Firebase(Constants.FIREBASE_URL).child("messages");
     mUsername = "TEMP";
     // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes

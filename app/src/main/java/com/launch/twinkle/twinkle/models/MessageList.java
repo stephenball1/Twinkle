@@ -10,6 +10,10 @@ public class MessageList extends AbstractModel {
   private MessageList() {
   }
 
+  public MessageList(String id) {
+    this.id = id;
+  }
+
   @Override protected String getTableName() {
     return "messageLists";
   }
