@@ -20,5 +20,5 @@ public class Chat extends AbstractModel {
 
   public String getMessageListId() { return messageListId; }
 
-  public List<String> getUserIds() { return userIds; }
+  public Map<String, Boolean> getUserIds() { return userIds; }
 }
