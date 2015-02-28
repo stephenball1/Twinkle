@@ -1,20 +1,79 @@
 package com.launch.twinkle.twinkle;
 
-import android.support.v4.app.Fragment;
+import android.database.DataSetObserver;
+import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 /**
  * Created by sball on 2/27/15.
  */
-public class ChatFragment extends Fragment {
-
+public class ChatFragment extends ListFragment {
+  private String mUsername;
+  private Firebase mFirebaseRef;
+  private MessageListAdapter mMessageListAdapter;
+  private LayoutInflater mInflater;
+  private ValueEventListener mConnectedListener;
+  
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.chat_fragment, container, false);
+    View view = inflater.inflate(R.layout.chat_fragment, container, false);
+
+    return view;
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    this.mFirebaseRef = new Firebase(Constants.FIREBASE_URL).child("messages");
+    mUsername = "TEMP";
+    // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
+    final ListView listView = getListView();
+    // Tell our list adapter that we only want 50 messages at a time
+    mMessageListAdapter = new MessageListAdapter(mFirebaseRef.limit(50), getActivity(), R.layout.chat_message, mUsername);
+    listView.setAdapter(mMessageListAdapter);
+    mMessageListAdapter.registerDataSetObserver(new DataSetObserver() {
+      @Override
+      public void onChanged() {
+        super.onChanged();
+        listView.setSelection(mMessageListAdapter.getCount() - 1);
+      }
+    });
+
+    // Finally, a little indication of connection status
+    mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        boolean connected = (Boolean) dataSnapshot.getValue();
+        if (connected) {
+          Toast.makeText(getActivity(), "Connected to Firebase", Toast.LENGTH_SHORT).show();
+        } else {
+          Toast.makeText(getActivity(), "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+        // No-op
+      }
+    });
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+    mMessageListAdapter.cleanup();
   }
 }
