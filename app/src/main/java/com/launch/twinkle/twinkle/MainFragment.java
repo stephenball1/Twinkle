@@ -173,9 +173,8 @@ public class MainFragment extends Fragment {
           // The Facebook user is now authenticated with Firebase
           Map<String, Object> providerData = authData.getProviderData();
           Map<String, String> facebookProfile = (Map<String, String>) providerData.get("cachedUserProfile");
-          User user = new User((String) providerData.get("id"), facebookProfile.get("first_name"),
-              facebookProfile.get("last_name"));
-          user.save();
+          User user = new User((String) providerData.get("id"), facebookProfile);
+          user.updateInfo();
         }
 
         @Override

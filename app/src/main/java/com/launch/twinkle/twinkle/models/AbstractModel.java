@@ -2,6 +2,8 @@ package com.launch.twinkle.twinkle.models;
 
 import com.launch.twinkle.twinkle.Constants;
 
+import java.util.Map;
+
 import com.firebase.client.Firebase;
 
 public abstract class AbstractModel {
@@ -28,6 +30,12 @@ public abstract class AbstractModel {
     String modelKey = getTableName() + "/" + id;
     Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(modelKey);
     firebaseRef.setValue(this);
+  }
+
+  public void update(Map<String, Object> values) {
+    String attrKey = getTableName() + "/" + id;
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
+    firebaseRef.updateChildren(values);
   }
 
   public void set(String key, Object value) {

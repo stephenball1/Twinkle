@@ -1,15 +1,18 @@
 package com.launch.twinkle.twinkle.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User extends AbstractModel {
 
   private String firstName;
   private String lastName;
   private String pictureUrl;
 
-  public User(String id, String firstName, String lastName) {
+  public User(String id, Map<String, String> facebookProfile) {
     this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    firstName = facebookProfile.get("first_name");
+    lastName = facebookProfile.get("last_name");
   }
 
   public String getLastName() {
@@ -22,6 +25,13 @@ public class User extends AbstractModel {
 
   public String getPictureUrl() {
     return pictureUrl;
+  }
+
+  public void updateInfo() {
+    Map<String, Object> values = new HashMap<String, Object>();
+    values.put("firstName", firstName);
+    values.put("lastName", lastName);
+    update(values);
   }
 
   @Override protected String getTableName() {
