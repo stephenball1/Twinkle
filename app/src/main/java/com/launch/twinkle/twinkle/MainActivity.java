@@ -10,15 +10,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-import com.facebook.widget.LoginButton;
 
+import com.facebook.widget.LoginButton;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends FragmentActivity {
+  private static final String FIREBASE_URL =
+      "https://blinding-fire-9025.firebaseio.com/";
+
   private MainFragment mainFragment;
+  private Firebase firebaseRef;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    firebaseRef = new Firebase(FIREBASE_URL).child("Holman");
+    firebaseRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        System.out.println(snapshot.getValue());
+      }
+
+      @Override public void onCancelled(FirebaseError error) { }
+    });
 
     if (savedInstanceState == null) {
       // Add the fragment on initial activity setup
