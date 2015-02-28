@@ -7,7 +7,11 @@ public class User extends AbstractModel {
 
   private String firstName;
   private String lastName;
-  private String pictureUrl;
+  private String profilePictureUrl;
+
+  public User(String id) {
+    this.id = id;
+  }
 
   public User(String id, Map<String, String> facebookProfile) {
     this.id = id;
@@ -23,8 +27,8 @@ public class User extends AbstractModel {
     return firstName;
   }
 
-  public String getPictureUrl() {
-    return pictureUrl;
+  public String getProfilePictureUrl() {
+    return profilePictureUrl;
   }
 
   public void updateInfo() {

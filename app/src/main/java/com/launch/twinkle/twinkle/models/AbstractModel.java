@@ -44,16 +44,22 @@ public abstract class AbstractModel {
     firebaseRef.setValue(value);
   }
 
-  public void pushToChildList(String key, String value) {
+  public void addToChildSet(String key, String value) {
     String attrKey = getTableName() + "/" + id + "/" + key;
     Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
     firebaseRef.child(value).setValue(true);
   }
 
-  public void removeFromChildList(String key, String value) {
+  public void removeFromChildSet(String key, String value) {
     String attrKey = getTableName() + "/" + id + "/" + key;
     Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
     firebaseRef.child(value).removeValue();
+  }
+
+  public void pushToChildList(String key, String value) {
+    String attrKey = getTableName() + "/" + id + "/" + key;
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
+    firebaseRef.push().setValue(value);
   }
 
   protected abstract String getTableName();
