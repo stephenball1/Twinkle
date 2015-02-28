@@ -1,19 +1,25 @@
 package com.launch.twinkle.twinkle;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +39,8 @@ import org.json.JSONObject;
 public class ProfileSetupFragment extends Fragment {
     private static final String TAG = ProfileSetupFragment.class.getSimpleName();
 
-    private ImageView userImage;
+    private GridView gridView;
+    private static List<Bitmap> pictures;
 
     public ProfileSetupFragment() {
     }
@@ -47,7 +54,10 @@ public class ProfileSetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
-        userImage = (ImageView) view.findViewById(R.id.userPicture);
+        gridView = (GridView)view.findViewById(R.id.gridview);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         getFacebookProfilePictures();
         return view;
@@ -77,41 +87,41 @@ public class ProfileSetupFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-    private class PictureGetter extends AsyncTask<String, Void, Bitmap> {
-        Bitmap bitmap;
+    private class PictureGetter extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Bitmap doInBackground(String... userID) {
-            bitmap = getFacebookProfilePicture(userID[0]);
-            return bitmap;
+        protected Void doInBackground(Void... v) {
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Bitmap result) {
-            userImage.setImageBitmap(result);
+        protected void onPostExecute(Void result) {
         }
     }
 
-    public static Bitmap getFacebookProfilePicture(String userID){
-        System.out.println("user id: " + userID);
-        Bitmap bitmap = null;
+    public static List<Bitmap> getBitMaps(List<String> urls){
+        List<Bitmap> pictures = new ArrayList<Bitmap>();
         try {
-            URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
-            bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+            for (String url : urls) {
+                System.out.println("getBitMaps");
+                URL imageURL = new URL(url);
+                pictures.add(BitmapFactory.decodeStream(imageURL.openConnection().getInputStream()));
+            }
         } catch (Exception e) {
             Log.i(TAG, "Cannot get profile picture.");
             e.printStackTrace();
         }
-        return bitmap;
+        return pictures;
     }
 
-    public static void getFacebookProfilePictures() {
+    public void getFacebookProfilePictures() {
+        System.out.println("hiiiiiiiii");
         Session session = Session.getActiveSession();
         new Request(session, "/me/albums", null, HttpMethod.GET, new Request.Callback() {
             public void onCompleted(Response response) {
                 try {
                     JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
-
+                    System.out.println("hi2");
                     for (int i = 0; i < albumArr.length(); i++) {
                         JSONObject item = albumArr.getJSONObject(i);
                         System.out.println("type:" + item.getString("type"));
@@ -122,10 +132,14 @@ public class ProfileSetupFragment extends Fragment {
                                     try {
                                         JSONArray photoArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
 
+                                        List<String> urls = new ArrayList<String>();
                                         for (int i = 0; i < photoArr.length(); i++) {
                                             JSONObject item = photoArr.getJSONObject(i);
-                                            System.out.println(item.toString());
+                                            String url = item.getJSONArray("images").getJSONObject(0).getString("source");
+                                            urls.add(url);
                                         }
+                                        pictures = getBitMaps(urls);
+                                        gridView.setAdapter(new MyAdapter(getActivity()));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -138,5 +152,50 @@ public class ProfileSetupFragment extends Fragment {
                 }
             }
         }).executeAsync();
+    }
+
+    private class MyAdapter extends BaseAdapter
+    {
+        private LayoutInflater inflater;
+
+        public MyAdapter(Context context)
+        {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return pictures.size();
+        }
+
+        @Override
+        public Bitmap getItem(int i)
+        {
+            return pictures.get(i);
+        }
+
+        @Override
+        public long getItemId(int i)
+        {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup)
+        {
+            View v = view;
+            ImageView picture;
+
+            if(v == null)
+            {
+                v = inflater.inflate(R.layout.profile_picture_view_item, viewGroup, false);
+                v.setTag(R.id.picture, v.findViewById(R.id.picture));
+            }
+
+            picture = (ImageView)v.getTag(R.id.picture);
+            picture.setImageBitmap(getItem(i));
+
+            return v;
+        }
     }
 }
