@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -24,10 +27,14 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ProfileSetupFragment extends Fragment {
     private static final String TAG = ProfileSetupFragment.class.getSimpleName();
 
     private String id;
+    private String accessToken;
     private ImageView userImage;
 
     public ProfileSetupFragment() {
@@ -47,6 +54,7 @@ public class ProfileSetupFragment extends Fragment {
         Bundle bundle = this.getArguments();
         id = bundle.getString("id");
 
+        getFacebookProfilePictures();
         PictureGetter pictureGetter = new PictureGetter();
         pictureGetter.execute(id);
         return view;
@@ -102,5 +110,40 @@ public class ProfileSetupFragment extends Fragment {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    public static void getFacebookProfilePictures() {
+        Session session = Session.getActiveSession();
+        new Request(session, "/me/albums", null, HttpMethod.GET, new Request.Callback() {
+            public void onCompleted(Response response) {
+                try {
+                    JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
+
+                    for (int i = 0; i < albumArr.length(); i++) {
+                        JSONObject item = albumArr.getJSONObject(i);
+                        System.out.println("type:" + item.getString("type"));
+                        if (item.getString("type").equals("profile")) {
+                            new Request(Session.getActiveSession(), "/" + item.getString("id") + "/photos", null, HttpMethod.GET, new Request.Callback() {
+                                public void onCompleted(Response response) {
+                                    System.out.println("hiii");
+                                    try {
+                                        JSONArray photoArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
+
+                                        for (int i = 0; i < photoArr.length(); i++) {
+                                            JSONObject item = photoArr.getJSONObject(i);
+                                            System.out.println(item.toString());
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).executeAsync();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).executeAsync();
     }
 }

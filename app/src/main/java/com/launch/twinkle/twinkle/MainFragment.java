@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -27,14 +30,15 @@ import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 public class MainFragment extends Fragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private UiLifecycleHelper uiHelper;
+    public static UiLifecycleHelper uiHelper;
     private TextView username;
     private LoginButton authButton;
+    private Session session;
 
     private final List<String> permissions;
 
     public MainFragment() {
-        permissions = Arrays.asList("public_profile,email,user_friends,user_status");
+        permissions = Arrays.asList("public_profile,email,user_friends,user_photos,user_status");
     }
 
     @Override
@@ -57,6 +61,7 @@ public class MainFragment extends Fragment {
             public void onUserInfoFetched(GraphUser user) {
                 if (user != null) {
                     username.setText("You are currently logged in as " + user.getName());
+
                     // Create new fragment and transaction.
                     Fragment newFragment = new ProfileSetupFragment();
                     Bundle bundle = new Bundle();
@@ -83,7 +88,7 @@ public class MainFragment extends Fragment {
         // For scenarios where the main activity is launched and user
         // session is not null, the session state change notification
         // may not be triggered. Trigger it if it's open/closed.
-        Session session = Session.getActiveSession();
+        session = Session.getActiveSession();
         if (session != null &&
                 (session.isOpened() || session.isClosed()) ) {
             onSessionStateChange(session, session.getState(), null);
@@ -120,6 +125,18 @@ public class MainFragment extends Fragment {
                                       Exception exception) {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
+            /*
+            new Request(
+                    session,
+                    "/me/photos",
+                    null,
+                    HttpMethod.GET,
+                    new Request.Callback() {
+                        public void onCompleted(Response response) {
+                            System.out.println("Response: " + response.toString());
+                        }
+                    }
+            ).executeAsync(); */
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
