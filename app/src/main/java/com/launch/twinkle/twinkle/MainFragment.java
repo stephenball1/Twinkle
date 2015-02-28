@@ -55,6 +55,17 @@ public class MainFragment extends Fragment {
           public void onUserInfoFetched(GraphUser user) {
               if (user != null) {
                   username.setText("You are currently logged in as " + user.getName());
+                  /*
+                  // Create new fragment and transaction.
+                  Fragment newFragment = new ProfileSetupFragment();
+                  Bundle bundle = new Bundle();
+                  bundle.putString("id", user.getId());
+                  newFragment.setArguments(bundle);
+                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                  transaction.replace(android.R.id.content, newFragment);
+                  transaction.addToBackStack(null);
+                  transaction.commit();
+                  */
               } else {
                   username.setText("You are not logged in.");
               }
@@ -64,6 +75,7 @@ public class MainFragment extends Fragment {
       username = (TextView) view.findViewById(R.id.username);
 
     initTempButton(view);
+    initProfileSetupButton(view);
     return view;
   }
 
@@ -124,6 +136,25 @@ public class MainFragment extends Fragment {
         transaction.commit();
       }
     });
+  }
+
+  private void initProfileSetupButton(View view) {
+      Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+      clickButton.setOnClickListener( new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Fragment newFragment = new ProfileSetupFragment();
+
+              Bundle bundle = new Bundle();
+              newFragment.setArguments(bundle);
+
+              FragmentTransaction transaction = getFragmentManager().beginTransaction();
+              transaction.replace(R.id.container, newFragment);
+              transaction.addToBackStack(null);
+              transaction.commit();
+          }
+      });
+
   }
 
   private void onSessionStateChange(Session session, SessionState state,

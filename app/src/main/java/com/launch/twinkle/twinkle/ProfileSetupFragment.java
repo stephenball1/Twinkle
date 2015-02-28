@@ -33,8 +33,6 @@ import org.json.JSONObject;
 public class ProfileSetupFragment extends Fragment {
     private static final String TAG = ProfileSetupFragment.class.getSimpleName();
 
-    private String id;
-    private String accessToken;
     private ImageView userImage;
 
     public ProfileSetupFragment() {
@@ -51,12 +49,7 @@ public class ProfileSetupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
         userImage = (ImageView) view.findViewById(R.id.userPicture);
 
-        Bundle bundle = this.getArguments();
-        id = bundle.getString("id");
-
         getFacebookProfilePictures();
-        PictureGetter pictureGetter = new PictureGetter();
-        pictureGetter.execute(id);
         return view;
     }
 
