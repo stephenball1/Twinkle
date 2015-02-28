@@ -4,6 +4,7 @@ public class User extends AbstractModel {
 
   private String firstName;
   private String lastName;
+  private String pictureUrl;
 
   public User(String id, String firstName, String lastName) {
     this.id = id;
@@ -17,6 +18,10 @@ public class User extends AbstractModel {
 
   public String getFirstName() {
     return firstName;
+  }
+
+  public String getPictureUrl() {
+    return pictureUrl;
   }
 
   @Override protected String getTableName() {
