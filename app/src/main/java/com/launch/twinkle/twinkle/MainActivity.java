@@ -2,7 +2,7 @@ package com.launch.twinkle.twinkle;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,21 +10,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import com.facebook.widget.LoginButton;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
+  private MainFragment mainFragment;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+
     if (savedInstanceState == null) {
-      getFragmentManager().beginTransaction()
-              .add(R.id.container, new PlaceholderFragment())
+      // Add the fragment on initial activity setup
+      mainFragment = new MainFragment();
+      getSupportFragmentManager()
+              .beginTransaction()
+              .add(android.R.id.content, mainFragment)
               .commit();
+    } else {
+      // Or set the fragment from restored state info
+      mainFragment = (MainFragment) getSupportFragmentManager()
+              .findFragmentById(android.R.id.content);
     }
   }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,21 +54,5 @@ public class MainActivity extends Activity {
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragment extends Fragment {
-
-    public PlaceholderFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-      View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-      return rootView;
-    }
   }
 }
