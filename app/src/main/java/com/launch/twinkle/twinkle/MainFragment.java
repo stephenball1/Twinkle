@@ -130,7 +130,7 @@ public class MainFragment extends Fragment {
 
       @Override
       public void onClick(View v) {
-        ChatFragment chatFragment = new ChatFragment("test");
+        ChatFragment chatFragment = ChatFragment.newInstance("test");
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
