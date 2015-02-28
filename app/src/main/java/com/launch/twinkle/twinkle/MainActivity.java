@@ -43,17 +43,18 @@ public class MainActivity extends FragmentActivity {
       @Override public void onCancelled(FirebaseError error) { }
     });
 
+    setContentView(R.layout.activity_main);
     if (savedInstanceState == null) {
       // Add the fragment on initial activity setup
       mainFragment = new MainFragment();
       getSupportFragmentManager()
               .beginTransaction()
-              .add(android.R.id.content, mainFragment)
+              .add(R.id.container, mainFragment)
               .commit();
     } else {
       // Or set the fragment from restored state info
       mainFragment = (MainFragment) getSupportFragmentManager()
-              .findFragmentById(android.R.id.content);
+              .findFragmentById(R.id.container);
     }
   }
 
