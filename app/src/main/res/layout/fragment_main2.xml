@@ -37,7 +37,7 @@
     <Button
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Do something"
+      android:text="Create chat fragment"
       android:id="@+id/temp_button"
       android:layout_marginTop="90dp"
       android:layout_below="@+id/textView"
@@ -46,7 +46,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do something"
+        android:text="Judy's Pictures"
         android:id="@+id/temp_button_2"
         android:layout_marginTop="90dp"
         android:layout_below="@+id/textView"
