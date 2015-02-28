@@ -30,10 +30,21 @@ public class ChatFragment extends ListFragment {
   private ValueEventListener mConnectedListener;
   private String chatId;
 
-  public ChatFragment(String chatId) {
-    this.chatId = chatId;
+  static ChatFragment newInstance(String chatId) {
+    ChatFragment f = new ChatFragment();
+    Bundle args = new Bundle();
+    args.putString("chatId", chatId);
+    f.setArguments(args);
+
+    return f;
   }
 
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    chatId = getArguments() != null ? getArguments().getString("chatId") : "";
+  }
+  
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
