@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,7 +65,7 @@ public class ProfileSetupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
         gridView = (GridView)view.findViewById(R.id.gridview);
         progressBar = (ProgressBar) view.findViewById(R.id.loading_panel);
-        nextButton = (Button) view.findViewById(R.id.button);
+        nextButton = (Button) view.findViewById(R.id.nextButton);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -86,6 +87,11 @@ public class ProfileSetupFragment extends Fragment {
             public void onClick(View v) {
                 // TODO(holman): store selected pictures to firebase.
                 // Perform action on click
+              Fragment matchFragment = new MatchFragment();
+              FragmentTransaction transaction = getFragmentManager().beginTransaction();
+              transaction.replace(android.R.id.content, matchFragment);
+              transaction.addToBackStack(null);
+              transaction.commit();
             }
         });
 
