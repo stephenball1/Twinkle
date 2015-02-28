@@ -10,6 +10,12 @@ public class Message extends AbstractModel {
   private Message() {
   }
 
+  public Message(String id, String userId, String message) {
+    this.id = id;
+    this.userId = userId;
+    this.message = message;
+  }
+
   @Override
   protected String getTableName() {
     return "messages";
