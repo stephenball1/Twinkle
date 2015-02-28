@@ -24,7 +24,7 @@ public class MainFragment extends Fragment {
   private final List<String> permissions;
 
   public MainFragment() {
-    permissions = Arrays.asList("user_status");
+    permissions = Arrays.asList("public_profile,email,user_friends,user_status");
   }
 
   @Override
