@@ -10,4 +10,7 @@ public class Message {
   private Message() {
   }
 
+  public String getUserId() { return userId; }
+
+  public String getMessage() { return message; }
 }

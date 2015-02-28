@@ -17,4 +17,9 @@ public class Chat {
     return id;
   }
 
+  public String getMatchId() { return matchId; }
+
+  public String getMessageListId() { return messageListId; }
+
+  public List<String> getUserIds() { return userIds; }
 }
