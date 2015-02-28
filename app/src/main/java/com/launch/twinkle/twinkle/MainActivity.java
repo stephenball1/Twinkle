@@ -20,18 +20,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends FragmentActivity {
-  private static final String FIREBASE_URL =
-      "https://blinding-fire-9025.firebaseio.com/";
-
   private MainFragment mainFragment;
   private Firebase firebaseRef;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    User user = new User("more-fake", "Alan", "Turing");
-    user.create();
 
     firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
     firebaseRef.addValueEventListener(new ValueEventListener() {

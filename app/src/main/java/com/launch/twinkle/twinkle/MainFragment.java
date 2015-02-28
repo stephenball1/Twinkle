@@ -1,7 +1,10 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.User;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -20,7 +23,9 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
-
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 public class MainFragment extends Fragment {
   private static final String TAG = MainFragment.class.getSimpleName();
@@ -55,6 +60,17 @@ public class MainFragment extends Fragment {
           public void onUserInfoFetched(GraphUser user) {
               if (user != null) {
                   username.setText("You are currently logged in as " + user.getName());
+                  /*
+                  // Create new fragment and transaction.
+                  Fragment newFragment = new ProfileSetupFragment();
+                  Bundle bundle = new Bundle();
+                  bundle.putString("id", user.getId());
+                  newFragment.setArguments(bundle);
+                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                  transaction.replace(android.R.id.content, newFragment);
+                  transaction.addToBackStack(null);
+                  transaction.commit();
+                  */
               } else {
                   username.setText("You are not logged in.");
               }
@@ -64,6 +80,7 @@ public class MainFragment extends Fragment {
       username = (TextView) view.findViewById(R.id.username);
 
     initTempButton(view);
+    initProfileSetupButton(view);
     return view;
   }
 
@@ -126,11 +143,50 @@ public class MainFragment extends Fragment {
     });
   }
 
+  private void initProfileSetupButton(View view) {
+      Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+      clickButton.setOnClickListener( new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Fragment newFragment = new ProfileSetupFragment();
+
+              Bundle bundle = new Bundle();
+              newFragment.setArguments(bundle);
+
+              FragmentTransaction transaction = getFragmentManager().beginTransaction();
+              transaction.replace(R.id.container, newFragment);
+              transaction.addToBackStack(null);
+              transaction.commit();
+          }
+      });
+
+  }
+
   private void onSessionStateChange(Session session, SessionState state,
                                     Exception exception) {
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL);
+
     if (state.isOpened()) {
+      firebaseRef.authWithOAuthToken("facebook", session.getAccessToken(), new Firebase.AuthResultHandler() {
+        @Override
+        public void onAuthenticated(AuthData authData) {
+          // The Facebook user is now authenticated with Firebase
+          Map<String, Object> providerData = authData.getProviderData();
+          Map<String, String> facebookProfile = (Map<String, String>) providerData.get("cachedUserProfile");
+          User user = new User((String) providerData.get("id"), facebookProfile.get("first_name"),
+              facebookProfile.get("last_name"));
+          user.save();
+        }
+
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError) {
+          // there was an error
+        }
+      });
+
       Log.i(TAG, "Logged in...");
     } else if (state.isClosed()) {
+      firebaseRef.unauth();
       Log.i(TAG, "Logged out...");
     }
   }
