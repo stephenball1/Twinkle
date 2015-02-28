@@ -20,7 +20,9 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
-
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 public class MainFragment extends Fragment {
   private static final String TAG = MainFragment.class.getSimpleName();
@@ -159,9 +161,24 @@ public class MainFragment extends Fragment {
 
   private void onSessionStateChange(Session session, SessionState state,
                                     Exception exception) {
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL);
+
     if (state.isOpened()) {
+      firebaseRef.authWithOAuthToken("facebook", session.getAccessToken(), new Firebase.AuthResultHandler() {
+        @Override
+        public void onAuthenticated(AuthData authData) {
+          // The Facebook user is now authenticated with Firebase
+        }
+
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError) {
+          // there was an error
+        }
+      });
+
       Log.i(TAG, "Logged in...");
     } else if (state.isClosed()) {
+      firebaseRef.unauth();
       Log.i(TAG, "Logged out...");
     }
   }
