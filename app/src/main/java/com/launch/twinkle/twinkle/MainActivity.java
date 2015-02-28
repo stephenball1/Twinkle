@@ -31,7 +31,7 @@ public class MainActivity extends FragmentActivity {
     super.onCreate(savedInstanceState);
 
     User user = new User("more-fake", "Alan", "Turing");
-    user.save();
+    user.create();
 
     firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
     firebaseRef.addValueEventListener(new ValueEventListener() {

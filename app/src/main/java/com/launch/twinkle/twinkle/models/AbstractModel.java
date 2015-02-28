@@ -12,6 +12,14 @@ public abstract class AbstractModel {
   protected AbstractModel() {
   }
 
+  public void create() {
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL);
+    firebaseRef = firebaseRef.child(getTableName()).push();
+
+    this.id = firebaseRef.getKey();
+    firebaseRef.setValue(this);
+  }
+
   public void save() {
     String modelKey = getTableName() + "/" + id;
     Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(modelKey);
