@@ -11,7 +11,7 @@ public class MessageList extends AbstractModel {
   }
 
   @Override protected String getTableName() {
-    return "message_lists";
+    return "messageLists";
   }
 
 }
