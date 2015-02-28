@@ -19,10 +19,6 @@ public class User extends AbstractModel {
     return firstName;
   }
 
-  public String getId() {
-    return id;
-  }
-
   @Override protected String getTableName() {
     return "users";
   }

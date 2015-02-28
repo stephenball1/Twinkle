@@ -2,9 +2,8 @@ package com.launch.twinkle.twinkle.models;
 
 import java.util.List;
 
-public class Chat {
+public class Chat extends AbstractModel {
 
-  private String id;
   private List<String> userIds;
   private String matchId;
   private String messageListId;
@@ -13,8 +12,8 @@ public class Chat {
   private Chat() {
   }
 
-  public String getId() {
-    return id;
+  @Override protected String getTableName() {
+    return "chats";
   }
 
 }

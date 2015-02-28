@@ -1,12 +1,15 @@
 package com.launch.twinkle.twinkle.models;
 
-public class Profile {
+public class Profile extends AbstractModel {
 
-  private String id;
   private String userId;
 
   // Required default constructor for Firebase object mapping
   private Profile() {
+  }
+
+  @Override protected String getTableName() {
+    return "profiles";
   }
 
 }

@@ -12,6 +12,10 @@ public abstract class AbstractModel {
   protected AbstractModel() {
   }
 
+  public String getId() {
+    return id;
+  }
+
   public void create() {
     Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL);
     firebaseRef = firebaseRef.child(getTableName()).push();
