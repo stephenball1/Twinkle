@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -44,6 +45,7 @@ public class ProfileSetupFragment extends Fragment {
 
     private GridView gridView;
     private ProgressBar progressBar;
+    private Button nextButton;
     private static List<Bitmap> pictures;
     private List<String> pictureUrls;
     private HashMap<Integer, Boolean> selectedPictures = new HashMap<Integer, Boolean>();
@@ -62,6 +64,7 @@ public class ProfileSetupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
         gridView = (GridView)view.findViewById(R.id.gridview);
         progressBar = (ProgressBar) view.findViewById(R.id.loading_panel);
+        nextButton = (Button) view.findViewById(R.id.button);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -76,6 +79,13 @@ public class ProfileSetupFragment extends Fragment {
                 } else {
                     checkMark.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // TODO(holman): store selected pictures to firebase.
+                // Perform action on click
             }
         });
 
