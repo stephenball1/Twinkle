@@ -27,16 +27,6 @@ public class MainActivity extends FragmentActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
-    firebaseRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot snapshot) {
-        System.out.println(snapshot.getValue());
-      }
-
-      @Override public void onCancelled(FirebaseError error) { }
-    });
-
     setContentView(R.layout.activity_main);
     if (savedInstanceState == null) {
       // Add the fragment on initial activity setup
