@@ -7,6 +7,11 @@
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop"/>
+    <ImageView android:id="@+id/selected"
+        android:scaleType="fitXY"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_gravity="top|right"
+        android:src="@drawable/ic_check_black_18dp"/>
 </FrameLayout>

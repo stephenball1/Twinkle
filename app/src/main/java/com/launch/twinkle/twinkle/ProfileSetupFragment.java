@@ -3,6 +3,7 @@ package com.launch.twinkle.twinkle;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -18,9 +19,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -40,7 +43,10 @@ public class ProfileSetupFragment extends Fragment {
     private static final String TAG = ProfileSetupFragment.class.getSimpleName();
 
     private GridView gridView;
+    private ProgressBar progressBar;
     private static List<Bitmap> pictures;
+    private List<String> pictureUrls;
+    private HashMap<Integer, Boolean> selectedPictures = new HashMap<Integer, Boolean>();
 
     public ProfileSetupFragment() {
     }
@@ -55,9 +61,23 @@ public class ProfileSetupFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
         gridView = (GridView)view.findViewById(R.id.gridview);
+        progressBar = (ProgressBar) view.findViewById(R.id.loading_panel);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                selectedPictures.put(position, !selectedPictures.get(position));
+                ImageView checkMark = (ImageView)v.findViewById(R.id.selected);
+                if (selectedPictures.get(position)) {
+                    checkMark.setVisibility(View.VISIBLE);
+                } else {
+                    checkMark.setVisibility(View.GONE);
+                }
+            }
+        });
 
         getFacebookProfilePictures();
         return view;
@@ -137,8 +157,11 @@ public class ProfileSetupFragment extends Fragment {
                                             JSONObject item = photoArr.getJSONObject(i);
                                             String url = item.getJSONArray("images").getJSONObject(0).getString("source");
                                             urls.add(url);
+                                            selectedPictures.put(i, true);
                                         }
                                         pictures = getBitMaps(urls);
+                                        pictureUrls = urls;
+                                        progressBar.setVisibility(View.GONE);
                                         gridView.setAdapter(new MyAdapter(getActivity()));
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -195,6 +218,7 @@ public class ProfileSetupFragment extends Fragment {
             picture = (ImageView)v.getTag(R.id.picture);
             picture.setImageBitmap(getItem(i));
 
+            //ImageView checkmark = (ImageView)v.getTag(R.id.selected);
             return v;
         }
     }
