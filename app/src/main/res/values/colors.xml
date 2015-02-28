@@ -1,0 +1,6 @@
+<resources>
+
+  <item name="primary" type="color">#FF7B1FA2</item>
+  <item name="primary_dark" type="color">#FF6A1B9A</item>
+  <item name="accent" type="color">#FF4DB6AC</item>
+</resources>
