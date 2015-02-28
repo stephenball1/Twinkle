@@ -1,6 +1,7 @@
 package com.launch.twinkle.twinkle;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
