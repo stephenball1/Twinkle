@@ -1,7 +1,10 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.User;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -168,6 +171,11 @@ public class MainFragment extends Fragment {
         @Override
         public void onAuthenticated(AuthData authData) {
           // The Facebook user is now authenticated with Firebase
+          Map<String, Object> providerData = authData.getProviderData();
+          Map<String, String> facebookProfile = (Map<String, String>) providerData.get("cachedUserProfile");
+          User user = new User((String) providerData.get("id"), facebookProfile.get("first_name"),
+              facebookProfile.get("last_name"));
+          user.save();
         }
 
         @Override
