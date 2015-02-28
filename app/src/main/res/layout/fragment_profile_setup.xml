@@ -16,4 +16,13 @@
         android:horizontalSpacing="0dp"
         android:stretchMode="columnWidth"
         android:numColumns="2" />
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_height="wrap_content" android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:text="Next"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom"
+        android:background="#E91E63"/>
 </FrameLayout>
