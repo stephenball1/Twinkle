@@ -30,4 +30,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.firebase:firebase-client-android:2.2.1+'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
 }

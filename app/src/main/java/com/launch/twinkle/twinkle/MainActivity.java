@@ -1,5 +1,7 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.*;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
@@ -28,7 +30,10 @@ public class MainActivity extends FragmentActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    firebaseRef = new Firebase(FIREBASE_URL).child("Holman");
+    User user = new User("more-fake", "Alan", "Turing");
+    user.create();
+
+    firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
     firebaseRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
@@ -38,17 +43,18 @@ public class MainActivity extends FragmentActivity {
       @Override public void onCancelled(FirebaseError error) { }
     });
 
+    setContentView(R.layout.activity_main);
     if (savedInstanceState == null) {
       // Add the fragment on initial activity setup
       mainFragment = new MainFragment();
       getSupportFragmentManager()
               .beginTransaction()
-              .add(android.R.id.content, mainFragment)
+              .add(R.id.container, mainFragment)
               .commit();
     } else {
       // Or set the fragment from restored state info
       mainFragment = (MainFragment) getSupportFragmentManager()
-              .findFragmentById(android.R.id.content);
+              .findFragmentById(R.id.container);
     }
   }
 
