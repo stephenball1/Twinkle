@@ -36,6 +36,18 @@ public abstract class AbstractModel {
     firebaseRef.setValue(value);
   }
 
+  public void pushToArrayAttr(String key, String value) {
+    String attrKey = getTableName() + "/" + id + "/" + key;
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
+    firebaseRef.child(value).setValue(true);
+  }
+
+  public void removeFromArrayAttr(String key, String value) {
+    String attrKey = getTableName() + "/" + id + "/" + key;
+    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL).child(attrKey);
+    firebaseRef.child(value).removeValue();
+  }
+
   protected abstract String getTableName();
 
 }
