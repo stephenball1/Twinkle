@@ -12,17 +12,25 @@
 </FrameLayout>
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-<com.facebook.widget.LoginButton
-  android:id="@+id/authButton"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_gravity="center_horizontal"
-  android:layout_marginTop="30dp"
-  />
-
+    <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        facebook:confirm_logout="false"
+        facebook:fetch_user_info="true" />
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="16sp"/>
 </LinearLayout>

@@ -10,16 +10,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.LoginButton.UserInfoChangedCallback;
+
 
 public class MainFragment extends Fragment {
   private static final String TAG = MainFragment.class.getSimpleName();
 
   private UiLifecycleHelper uiHelper;
+  private TextView username;
+  private LoginButton authButton;
 
   private final List<String> permissions;
 
@@ -39,10 +45,21 @@ public class MainFragment extends Fragment {
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_main2, container, false);
 
-    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+    authButton = (LoginButton) view.findViewById(R.id.authButton);
     authButton.setFragment(this);
     authButton.setReadPermissions(permissions);
+      authButton.setUserInfoChangedCallback(new UserInfoChangedCallback() {
+          @Override
+          public void onUserInfoFetched(GraphUser user) {
+              if (user != null) {
+                  username.setText("You are currently logged in as " + user.getName());
+              } else {
+                  username.setText("You are not logged in.");
+              }
+          }
+      });
 
+      username = (TextView) view.findViewById(R.id.username);
     return view;
   }
 
