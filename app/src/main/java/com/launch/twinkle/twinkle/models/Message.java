@@ -10,6 +10,10 @@ public class Message {
   private Message() {
   }
 
+  @Override protected String getTableName() {
+    return "messages";
+  }
+
   public String getUserId() { return userId; }
 
   public String getMessage() { return message; }

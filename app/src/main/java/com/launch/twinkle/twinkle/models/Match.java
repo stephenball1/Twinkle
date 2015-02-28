@@ -2,17 +2,16 @@ package com.launch.twinkle.twinkle.models;
 
 import java.util.List;
 
-public class Match {
+public class Match extends AbstractModel {
 
-  private String id;
   private List<String> userIds;
 
   // Required default constructor for Firebase object mapping
   private Match() {
   }
 
-  public String getId() {
-    return id;
+  @Override protected String getTableName() {
+    return "matches";
   }
 
 }
