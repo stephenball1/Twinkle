@@ -1,5 +1,7 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.*;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +29,9 @@ public class MainActivity extends FragmentActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    User user = new User("more-fake", "Alan", "Turing");
+    user.save();
 
     firebaseRef = new Firebase(Constants.FIREBASE_URL).child("Holman");
     firebaseRef.addValueEventListener(new ValueEventListener() {
