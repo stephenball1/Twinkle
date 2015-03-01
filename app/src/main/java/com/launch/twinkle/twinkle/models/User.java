@@ -8,7 +8,7 @@ public class User extends AbstractModel {
   private String firstName;
   private String lastName;
   private String profilePictureUrl;
-  private Map<String, Boolean> matchIds;
+  private Map<String, String> matchIds;
 
   public User(String id) {
     this.id = id;
@@ -18,6 +18,16 @@ public class User extends AbstractModel {
     this.id = id;
     firstName = facebookProfile.get("first_name");
     lastName = facebookProfile.get("last_name");
+  }
+
+  public User(String id, String firstName, String lastName, String profilePictureUrl,
+      Map<String, String> matchIds) {
+
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.profilePictureUrl = profilePictureUrl;
+    this.matchIds = matchIds;
   }
 
   public String getLastName() {
