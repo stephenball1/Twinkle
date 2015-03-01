@@ -82,13 +82,13 @@ public class MatchFragment extends Fragment {
     addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         String url = (String) snapshot.getValue();
         try {
-          PictureLoaderTask pictureLoaderTask = new PictureLoaderTask();
-          pictureLoaderTask.execute(url, imageView);
+          new PictureLoaderTask(new BitmapRunnable() {
+            public void run() {
+              imageView.setImageBitmap(getBitmap());
+            }
+          }).execute(url);
 
         } catch (Exception e) {
           e.printStackTrace();
