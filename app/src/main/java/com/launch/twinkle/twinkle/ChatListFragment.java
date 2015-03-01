@@ -22,6 +22,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.launch.twinkle.twinkle.models.User;
 
 /**
  * Created by sball on 2/27/15.
@@ -81,7 +82,19 @@ public class ChatListFragment extends ListFragment {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String chatId = (String) listView.getItemAtPosition(position);
-        Fragment chatListFragment = ChatFragment.newInstance(chatId);
+        ChatPreview chatPreview = mListAdapter.getSecondaryValue(mListAdapter.getItem(position));
+        Fragment chatListFragment = null;
+        if (chatPreview != null) {
+          User user = chatPreview.getInitialUser();
+          if (user != null) {
+            chatListFragment =
+                ChatFragment.newInstance(chatId, user.getFirstName(), user.getLastName());
+          } else {
+            chatListFragment = ChatFragment.newInstance(chatId);
+          }
+        } else {
+          chatListFragment = ChatFragment.newInstance(chatId);
+        }
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, chatListFragment);
 

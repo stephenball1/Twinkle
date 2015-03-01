@@ -1,5 +1,7 @@
 package com.launch.twinkle.twinkle.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,20 @@ public class User extends AbstractModel {
     } else {
       return new HashMap<String, String>();
     }
+  }
+
+  public long getAge() {
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    try {
+      Date birthday = sdf.parse(getBirthday());
+      Date today = new Date();
+      return today.getYear() - birthday.getYear();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return 28;
   }
 
   public void updateInfo() {

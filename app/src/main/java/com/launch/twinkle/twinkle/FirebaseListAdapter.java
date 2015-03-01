@@ -165,7 +165,7 @@ public abstract class FirebaseListAdapter<T, U> extends BaseAdapter {
   }
 
   @Override
-  public Object getItem(int i) {
+  public T getItem(int i) {
     return mModels.get(i);
   }
 

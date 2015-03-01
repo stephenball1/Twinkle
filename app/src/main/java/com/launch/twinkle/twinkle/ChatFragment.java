@@ -2,6 +2,7 @@ package com.launch.twinkle.twinkle;
 
 import com.launch.twinkle.twinkle.models.Message;
 import com.launch.twinkle.twinkle.models.MessageList;
+import com.launch.twinkle.twinkle.models.User;
 
 import android.support.v4.app.Fragment;
 import android.database.DataSetObserver;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -29,11 +31,25 @@ public class ChatFragment extends ListFragment {
   private LayoutInflater mInflater;
   private ValueEventListener mConnectedListener;
   private String chatId;
+  private View view;
 
   static ChatFragment newInstance(String chatId) {
     ChatFragment f = new ChatFragment();
     Bundle args = new Bundle();
     args.putString("chatId", chatId);
+    args.putString("firstName", "");
+    args.putString("lastName", "");
+    f.setArguments(args);
+
+    return f;
+  }
+
+  static ChatFragment newInstance(String chatId, String firstName, String lastName) {
+    ChatFragment f = new ChatFragment();
+    Bundle args = new Bundle();
+    args.putString("chatId", chatId);
+    args.putString("firstName", firstName);
+    args.putString("lastName", lastName);
     f.setArguments(args);
 
     return f;
@@ -42,14 +58,23 @@ public class ChatFragment extends ListFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    chatId = getArguments() != null ? getArguments().getString("chatId") : "ERRRRRRR";
+    if (getArguments() != null) {
+      chatId = getArguments().getString("chatId");
+      String firstName = getArguments().getString("firstName");
+      String lastName = getArguments().getString("lastName");
+      getActivity().getActionBar().setTitle(firstName + " " + lastName);
+      System.out.println("Name: " + firstName + " " + lastName);
+    } else {
+      chatId = "ERRRRRR";
+    }
+
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.chat_fragment, container, false);
+    view = inflater.inflate(R.layout.chat_fragment, container, false);
 
     view.findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
       @Override
@@ -111,6 +136,39 @@ public class ChatFragment extends ListFragment {
       @Override
       public void onCancelled(FirebaseError firebaseError) {
         // No-op
+      }
+    });
+
+    String matchKey = "matches/" + chatId + "/matchedUserId";
+    Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
+
+    final View finalView = view;
+    matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        String matchedUserId = (String) snapshot.getValue();
+        String userKey = "users/" + matchedUserId;
+        Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(userKey);
+        userFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            User matchedUser = snapshot.getValue(User.class);
+
+            TextView matchName = (TextView) finalView.findViewById(R.id.match_name);
+            matchName.setText(matchedUser.getDisplayName());
+
+            TextView matchAge = (TextView) finalView.findViewById(R.id.match_age);
+            matchAge.setText(matchedUser.getAge() + " yrs old");
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
       }
     });
   }
