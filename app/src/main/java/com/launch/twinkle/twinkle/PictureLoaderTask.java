@@ -11,17 +11,26 @@ public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
 
   private ImageView view;
   private BitmapRunnable bitmapRunnable;
+  boolean doNothing = false;
 
   public PictureLoaderTask(BitmapRunnable bitmapRunnable) {
     this.bitmapRunnable = bitmapRunnable;
   }
+
   @Override
   protected Bitmap doInBackground(String... args) {
     String url = (String)args[0];
+    Bitmap cachedBitmap = BitmapCache.getBitmapFromMemCache(url);
+    if (cachedBitmap != null) {
+      return cachedBitmap;
+    }
 
     try {
       URL imageURL = new URL(url);
-      return BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+      Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+      BitmapCache.addBitmapToMemoryCache(url, bitmap);
+
+      return bitmap;
     } catch (Exception e) {
       e.printStackTrace();
       return null;
