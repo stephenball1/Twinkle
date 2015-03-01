@@ -14,8 +14,7 @@
       android:layout_width="35dp"
       android:layout_height="35dp"
       android:layout_marginLeft="15dp"
-      android:layout_centerVertical="true"
-      android:src="@drawable/profile_test"/>
+      android:layout_centerVertical="true"/>
 
     <TextView
       android:id="@+id/match_name"

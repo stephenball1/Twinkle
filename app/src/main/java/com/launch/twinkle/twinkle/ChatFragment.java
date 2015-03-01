@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -121,24 +121,6 @@ public class ChatFragment extends ListFragment {
       }
     });
 
-    // Finally, a little indication of connection status
-    mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
-        boolean connected = (Boolean) dataSnapshot.getValue();
-        if (connected) {
-          Toast.makeText(getActivity(), "Connected to Firebase", Toast.LENGTH_SHORT).show();
-        } else {
-          Toast.makeText(getActivity(), "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-        }
-      }
-
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-        // No-op
-      }
-    });
-
     String matchKey = "matches/" + chatId + "/matchedUserId";
     Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
 
@@ -159,6 +141,15 @@ public class ChatFragment extends ListFragment {
 
             TextView matchAge = (TextView) finalView.findViewById(R.id.match_age);
             matchAge.setText(matchedUser.getAge() + " yrs old");
+
+            String url = matchedUser.getProfilePictureUrl();
+
+            new PictureLoaderTask(new BitmapRunnable() {
+              public void run() {
+                ImageView image = (ImageView) finalView.findViewById(R.id.snippet_profile_picture);
+                image.setImageBitmap(getBitmap());
+              }
+            }).execute(url);
           }
 
           @Override
@@ -176,7 +167,6 @@ public class ChatFragment extends ListFragment {
   @Override
   public void onStop() {
     super.onStop();
-    mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
     mMessageListAdapter.cleanup();
   }
 }
