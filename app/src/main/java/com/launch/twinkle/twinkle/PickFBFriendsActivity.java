@@ -19,6 +19,7 @@ public class PickFBFriendsActivity extends FragmentActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    getActionBar().setTitle("Build Your Circle");
     setContentView(R.layout.activity_pick_fbfriends);
 
     FragmentManager fm = getSupportFragmentManager();
