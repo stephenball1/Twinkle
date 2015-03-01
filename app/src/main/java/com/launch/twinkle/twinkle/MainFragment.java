@@ -1,5 +1,8 @@
 package com.launch.twinkle.twinkle;
 
+import com.facebook.FacebookException;
+import com.facebook.widget.FriendPickerFragment;
+import com.facebook.widget.PickerFragment;
 import com.launch.twinkle.twinkle.models.User;
 
 import java.util.Arrays;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FriendPickerFragment;
+import com.facebook.widget.PickerFragment;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
@@ -33,7 +38,6 @@ public class MainFragment extends Fragment {
   private UiLifecycleHelper uiHelper;
   private TextView username;
   private LoginButton authButton;
-
   private final List<String> permissions;
 
   public MainFragment() {
@@ -148,15 +152,38 @@ public class MainFragment extends Fragment {
       clickButton.setOnClickListener( new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              Fragment newFragment = new MatchFragment();
-
+            Intent pickFriends= new Intent(getActivity(),PickFBFriendsActivity.class);
+            getActivity().startActivity(pickFriends);
+            /*
               Bundle bundle = new Bundle();
-              newFragment.setArguments(bundle);
+              bundle.putString(FriendPickerFragment.USER_ID_BUNDLE_KEY, "10153082238072156");
+              bundle.putBoolean(FriendPickerFragment.MULTI_SELECT_BUNDLE_KEY, true);
+              bundle.putBoolean(FriendPickerFragment.SHOW_TITLE_BAR_BUNDLE_KEY, false);
+              FriendPickerFragment friendPickerFragment = new FriendPickerFragment(bundle);
+            // Set the listener to handle errors
+            friendPickerFragment.setOnErrorListener(new PickerFragment.OnErrorListener() {
+              @Override
+              public void onError(PickerFragment<?> fragment,
+                                  FacebookException error) {
+                System.out.println("friend picker error");
+              }
+            });
+            // Set the listener to handle button clicks
+            friendPickerFragment.setOnDoneButtonClickedListener(
+                new PickerFragment.OnDoneButtonClickedListener() {
+                  @Override
+                  public void onDoneButtonClicked(PickerFragment<?> fragment) {
+                    finishActivity();
+                  }
+                });
 
-              FragmentTransaction transaction = getFragmentManager().beginTransaction();
-              transaction.replace(R.id.container, newFragment);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+              transaction.replace(R.id.container, friendPickerFragment);
               transaction.addToBackStack(null);
               transaction.commit();
+
+            friendPickerFragment.loadData(false);
+            */
           }
       });
 
