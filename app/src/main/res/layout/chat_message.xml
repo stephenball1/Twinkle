@@ -5,30 +5,6 @@
   android:paddingBottom="10dp"
   android:id="@+id/chat_message">
 
-  <!--LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="35dp"
-    android:paddingRight="15dp"
-    android:minHeight="45dp"
-    android:gravity="center_vertical"
-    >
-
-    <TextView
-      android:id="@+id/message"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="#FFFFFF"
-      android:paddingLeft="35dp"
-      android:paddingRight="5dp"
-      android:minHeight="35dp"
-      android:paddingTop="5dp"
-      android:text="Ian, this is a message that should take up at least 4 lines of text since we are testing centering capabilities of the image"
-      android:textColor="#000000"
-      android:textSize="18dp"
-      />
-  </LinearLayout-->
-
   <TextView
     android:id="@+id/message"
     android:layout_width="match_parent"
@@ -38,12 +14,13 @@
     android:layout_marginRight="5dp"
     android:paddingLeft="35dp"
     android:paddingRight="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     android:minHeight="35dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:text="Ian, "
+    android:text="Ian...... "
     android:textColor="#000000"
     android:textSize="18dp"
+    android:layout_centerVertical="true"
     />
 
 
@@ -54,18 +31,5 @@
     android:layout_marginLeft="15dp"
     android:layout_centerVertical="true"/>
 
-  <!--LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical">
-
-    <com.launch.twinkle.twinkle.CircleImageView
-      android:id="@+id/profile_picture"
-      android:layout_width="45dp"
-      android:layout_height="45dp"/>
-  </LinearLayout-->
 </RelativeLayout>
 

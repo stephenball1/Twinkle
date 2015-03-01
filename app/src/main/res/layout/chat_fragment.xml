@@ -2,29 +2,86 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+  <RelativeLayout
+    android:id="@+id/match_snippet"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white"
+    >
+
+    <com.launch.twinkle.twinkle.CircleImageView
+      android:id="@+id/snippet_profile_picture"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_marginLeft="15dp"
+      android:layout_centerVertical="true"
+      android:src="@drawable/profile_test"/>
+
+    <TextView
+      android:id="@+id/match_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="45dp"
+      android:paddingLeft="20dp"
+      android:layout_centerVertical="true"
+      android:text="Emily K."
+      android:textColor="#000000"
+      android:textSize="22dp" />
+
+    <TextView
+      android:id="@+id/match_age"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/match_name"
+      android:paddingLeft="15dp"
+      android:layout_centerVertical="true"
+      android:layout_alignBaseline="@+id/match_name"
+      android:text="24 yrs old"
+      android:textColor="#B8B8B8"
+      android:textSize="14dp" />
+
+
+  </RelativeLayout>
 
   <ListView
     android:id="@android:id/list"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/match_snippet"
     android:layout_above="@+id/messageListFooter"
-    android:layout_alignParentTop="true"
+    android:layout_alignParentTop="false"
     android:transcriptMode="alwaysScroll"
-    android:divider="#00000000" />
+    android:divider="@android:color/transparent"
+    android:listSelector="@android:color/transparent"/>
 
   <LinearLayout
     android:id="@+id/messageListFooter"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@android:color/white">
+
+    <ImageView
+      android:id="@+id/chat_icon"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_gravity="top"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_marginTop="12dp"
+      android:padding="1dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/message"/>
 
     <EditText
       android:id="@+id/messageInput"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:inputType="textCapSentences|textAutoCorrect"/>
+      android:layout_gravity="bottom"
+      android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+      android:hint="What do you think?"/>
 
     <ImageButton
       android:id="@+id/sendButton"
@@ -33,5 +90,9 @@
       android:src="@android:drawable/ic_menu_send" />
   </LinearLayout>
 
+  <View android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/match_snippet"
+        android:background="#FFCCCCCC" />
 
 </RelativeLayout>
