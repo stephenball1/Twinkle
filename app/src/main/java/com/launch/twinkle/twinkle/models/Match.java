@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Match extends AbstractModel {
 
-  private Map<String, Boolean> userIds;
+  private Map<String, String> userIds;
 
   // Required default constructor for Firebase object mapping
   private Match() {
