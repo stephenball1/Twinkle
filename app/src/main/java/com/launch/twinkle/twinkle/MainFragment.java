@@ -37,7 +37,7 @@ public class MainFragment extends Fragment {
   private final List<String> permissions;
 
   public MainFragment() {
-    permissions = Arrays.asList("public_profile,email,user_friends,user_status");
+    permissions = Arrays.asList("public_profile,user_birthday,email,user_friends,user_status");
   }
 
   @Override
@@ -172,7 +172,7 @@ public class MainFragment extends Fragment {
         public void onAuthenticated(AuthData authData) {
           // The Facebook user is now authenticated with Firebase
           Map<String, Object> providerData = authData.getProviderData();
-          Map<String, String> facebookProfile = (Map<String, String>) providerData.get("cachedUserProfile");
+          Map<String, Object> facebookProfile = (Map<String, Object>) providerData.get("cachedUserProfile");
           User user = new User((String) providerData.get("id"), facebookProfile);
           user.updateInfo();
         }

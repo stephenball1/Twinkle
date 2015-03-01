@@ -1,10 +1,15 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.User;
+
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -53,18 +58,71 @@ public class MatchFragment extends Fragment {
 
   public MatchFragment() {
     templateData.add("10153082238072156");
-    templateData.add("Holman G");
-    templateData.add("25 yrs old");
+    templateData.add("");
+    templateData.add("");
     templateData.add("Ian, she seems like a really nice girl.");
     templateData.add("10153082238072156");
     templateData.add("6 more messages");
   }
 
-  public void setMatchingPage() {
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    String idKey = "users/" + ApplicationState.getLoggedInUserId() + "/matchId";
+    Firebase idFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(idKey);
+    idFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        String matchId = (String) snapshot.getValue();
+        String matchKey = "matches/" + matchId + "/matchedUserId";
+        Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
+        matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            String matchedUserId = (String) snapshot.getValue();
+            String userKey = "users/" + matchedUserId;
+            Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(userKey);
+            userFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot snapshot) {
+                User matchedUser = snapshot.getValue(User.class);
+                setMatchingPage(matchedUser);
+              }
+
+              @Override
+              public void onCancelled(FirebaseError firebaseError) {
+              }
+            });
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
+  }
+
+  public void setMatchingPage(User user) {
     TextView matchName = (TextView) view.findViewById(R.id.match_name);
-    matchName.setText(templateData.get(1));
+    matchName.setText(user.getFirstName() + " " + user.getLastName().charAt(0));
     TextView matchAge = (TextView) view.findViewById(R.id.match_age);
-    matchAge.setText(templateData.get(2));
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    try {
+      Date birthday = sdf.parse(user.getBirthday());
+      Date today = new Date();
+      long diff = today.getYear() - birthday.getYear();
+      matchAge.setText(diff + " yrs old");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     TextView matchMessage = (TextView) view.findViewById(R.id.message);
     matchMessage.setText(templateData.get(3));
     TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
@@ -114,8 +172,6 @@ public class MatchFragment extends Fragment {
 
     getActivity().getActionBar().setTitle("Today's Match");
     getActivity().invalidateOptionsMenu();
-
-    setMatchingPage();
 
     Button yesButton = (Button) view.findViewById(R.id.yes_button);
     yesButton.setOnClickListener(new View.OnClickListener() {
