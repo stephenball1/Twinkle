@@ -8,6 +8,9 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -35,21 +38,37 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithI
   protected void populateView(View view, String messageId, MessageWithImage messageWithImage) {
     Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
 
-    TextView textView = (TextView) view.findViewById(R.id.message);
-    final View finalView = view;
-
     // In theory, when the message becomes not null, another render will be called
     // (because we called notifyDataSetChanged below) and we will successfully have the
     // message
     if (messageWithImage != null) {
       Message message = messageWithImage.getMessage();
+      TextView textView = (TextView) view.findViewById(R.id.message);
+      ImageView image = (ImageView) view.findViewById(R.id.profile_picture);
       if (message != null) {
         textView.setText(message.getMessage());
       }
+
       Bitmap bitmap = messageWithImage.getBitmap();
       if (bitmap != null) {
-        ImageView image = (ImageView) finalView.findViewById(R.id.profile_picture);
         image.setImageBitmap(bitmap);
+      }
+
+      if (message != null) {
+        LayoutParams inputParams = (RelativeLayout.LayoutParams) image.getLayoutParams();
+        LayoutParams textParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+
+        if (message.getUserId().equals(ApplicationState.getLoggedInUserId())) {
+          inputParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+          textParams.setMargins(25, 0, 100, 0);
+          textView.setPadding(100, 50, 25, 50);
+        } else {
+          inputParams.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+          textParams.setMargins(100, 0, 25, 0);
+          textView.setPadding(100, 50, 25, 50);
+        }
+        image.setLayoutParams(inputParams);
+        textView.setLayoutParams(textParams);
       }
     }
   }
