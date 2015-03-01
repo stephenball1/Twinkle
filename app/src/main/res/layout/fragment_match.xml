@@ -66,6 +66,7 @@
     android:textSize="18dp" />
 
   <LinearLayout
+    android:id="@+id/messageListFooter"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"

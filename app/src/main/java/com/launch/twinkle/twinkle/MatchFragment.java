@@ -58,8 +58,14 @@ public class MatchFragment extends Fragment {
   // match user id, Name, age, comment, commenter user id, number of messages.
   private View view;
   private String matchId;
+  private boolean hideFooter = false;
 
   public MatchFragment() {
+  }
+
+  public MatchFragment(String matchId) {
+    this.matchId = matchId;
+    hideFooter = true;
   }
 
   @Override
@@ -71,7 +77,10 @@ public class MatchFragment extends Fragment {
     idFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
-        matchId = (String) snapshot.getValue();
+        if (matchId == null) {
+          matchId = (String) snapshot.getValue();
+        }
+
         String matchKey = "matches/" + matchId + "/matchedUserId";
         Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
         matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,8 +195,14 @@ public class MatchFragment extends Fragment {
                            Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_match, container, false);
 
-    getActivity().getActionBar().setTitle("Today's Match");
     getActivity().invalidateOptionsMenu();
+
+    if (hideFooter) {
+      view.findViewById(R.id.messageListFooter).setVisibility(View.GONE);
+      getActivity().getActionBar().setTitle("Profile");
+    } else {
+      getActivity().getActionBar().setTitle("Today's Match");
+    }
 
     Button yesButton = (Button) view.findViewById(R.id.yes_button);
     yesButton.setOnClickListener(new View.OnClickListener() {

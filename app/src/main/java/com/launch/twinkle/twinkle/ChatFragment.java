@@ -5,6 +5,7 @@ import com.launch.twinkle.twinkle.models.MessageList;
 import com.launch.twinkle.twinkle.models.User;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.database.DataSetObserver;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -80,6 +81,18 @@ public class ChatFragment extends ListFragment {
       @Override
       public void onClick(View view) {
         createMessage();
+      }
+    });
+
+    view.findViewById(R.id.match_snippet).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Fragment matchFragment = new MatchFragment(chatId);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, matchFragment);
+
+        transaction.addToBackStack(null);
+        transaction.commit();
       }
     });
 
