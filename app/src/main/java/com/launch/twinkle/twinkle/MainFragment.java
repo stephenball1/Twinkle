@@ -71,8 +71,7 @@ public class MainFragment extends Fragment {
                 getActivity().getActionBar().show();
                 //username.setText("You are currently logged in as " + user.getName());
                 // Create new fragment and transaction.
-              /*
-              TODO(judy or holman): Hook this up with instead of debug view.
+
                 ProfileSetupFragment profileFragment = new ProfileSetupFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, profileFragment);
@@ -80,7 +79,7 @@ public class MainFragment extends Fragment {
 
               // Commit the transaction
               transaction.commit();
-              */
+
               } else {
                   username.setText("");
               }

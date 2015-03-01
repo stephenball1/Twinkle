@@ -174,6 +174,18 @@ public class ProfileSetupFragment extends Fragment {
     return pictures;
   }
 
+  public static Bitmap getFacebookProfilePicture(String userID){
+    try {
+      URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+      Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+      return bitmap;
+    } catch (Exception exception) {
+      exception.printStackTrace();
+    }
+
+    return null;
+  }
+
   public void getFacebookProfilePictures() {
     System.out.println("hiiiiiiiii");
     Session session = Session.getActiveSession();
@@ -184,6 +196,17 @@ public class ProfileSetupFragment extends Fragment {
           JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
           System.out.println("hi2");
           System.out.println(albumArr.toString());
+          List<String> urls = new ArrayList<String>();
+
+          if (albumArr.length() == 0) {
+            urls.add("https://graph.facebook.com/" + ApplicationState.getLoggedInUserId() + "/picture?type=large");
+            selectedPictures.put(0, true);
+            pictures = new ArrayList<Bitmap>();
+            pictures.add(getFacebookProfilePicture(ApplicationState.getLoggedInUserId()));
+            pictureUrls = urls;
+            progressBar.setVisibility(View.GONE);
+            gridView.setAdapter(new MyAdapter(getActivity()));
+          }
           for (int i = 0; i < albumArr.length(); i++) {
             JSONObject item = albumArr.getJSONObject(i);
             System.out.println("type:" + item.getString("type"));
@@ -195,12 +218,13 @@ public class ProfileSetupFragment extends Fragment {
                     JSONArray photoArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
 
                     List<String> urls = new ArrayList<String>();
-                    for (int i = 0; i < photoArr.length(); i++) {
-                      JSONObject item = photoArr.getJSONObject(i);
-                      String url = item.getJSONArray("images").getJSONObject(0).getString("source");
-                      urls.add(url);
-                      selectedPictures.put(i, true);
-                    }
+
+                      for (int i = 0; i < photoArr.length(); i++) {
+                        JSONObject item = photoArr.getJSONObject(i);
+                        String url = item.getJSONArray("images").getJSONObject(0).getString("source");
+                        urls.add(url);
+                        selectedPictures.put(i, true);
+                      }
                     pictures = getBitMaps(urls);
                     pictureUrls = urls;
                     progressBar.setVisibility(View.GONE);
