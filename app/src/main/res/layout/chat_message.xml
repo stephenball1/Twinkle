@@ -33,8 +33,7 @@
     <com.launch.twinkle.twinkle.CircleImageView
       android:id="@+id/profile_picture"
       android:layout_width="75dp"
-      android:layout_height="75dp"
-      android:src="@drawable/profile_test" />
+      android:layout_height="75dp"/>
   </LinearLayout>
 </RelativeLayout>
 
