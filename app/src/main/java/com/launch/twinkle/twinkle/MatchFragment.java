@@ -57,17 +57,10 @@ import org.json.JSONObject;
 public class MatchFragment extends Fragment {
   private static final String TAG = MatchFragment.class.getSimpleName();
   // match user id, Name, age, comment, commenter user id, number of messages.
-  private List<String> templateData = new ArrayList<String>();
   private View view;
   private String matchId;
 
   public MatchFragment() {
-    templateData.add("10153082238072156");
-    templateData.add("");
-    templateData.add("");
-    templateData.add("Ian, she seems like a really nice girl.");
-    templateData.add("10153082238072156");
-    templateData.add("6 more messages");
   }
 
   @Override
@@ -146,7 +139,7 @@ public class MatchFragment extends Fragment {
         } else {
           TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
           LinkedHashMap<String, String> messageIds = list.getMessageIds();
-          matchMoreMessages.setText(messageIds.size() + " messages");
+          matchMoreMessages.setText(messageIds.size() + " more messages");
 
           Object[] texts = messageIds.values().toArray();
           String text = (String) texts[messageIds.size() - 1];
@@ -159,7 +152,7 @@ public class MatchFragment extends Fragment {
       }
     });
 
-    setPage(templateData.get(0), (ImageView) view.findViewById(R.id.match_picture));
+    setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture));
   }
 
   public void setPage(String userId, final ImageView imageView) {
@@ -226,6 +219,7 @@ public class MatchFragment extends Fragment {
         transaction.commit();
       }
     });
+    initTempButton(view);
     return view;
   }
 
@@ -277,24 +271,7 @@ public class MatchFragment extends Fragment {
         TextView matchMessage = (TextView) view.findViewById(R.id.message);
         matchMessage.setText(message.getMessage());
 
-        String pictureKey = "users/" + message.getUserId() + "/profilePictureUrl";
-        Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL);
-        userFirebaseRef.child(pictureKey).addListenerForSingleValueEvent(new ValueEventListener() {
-          @Override
-          public void onDataChange(DataSnapshot snapshot) {
-            String url = (String) snapshot.getValue();
-            final ImageView imageView = (ImageView) view.findViewById(R.id.profile_picture);
-            new PictureLoaderTask(new BitmapRunnable() {
-              public void run() {
-                imageView.setImageBitmap(getBitmap());
-              }
-            }).execute(url);
-          }
-
-          @Override
-          public void onCancelled(FirebaseError firebaseError) {
-          }
-        });
+        setPage(message.getUserId(), (ImageView) view.findViewById(R.id.profile_picture));
       }
 
       @Override
@@ -302,4 +279,24 @@ public class MatchFragment extends Fragment {
       }
     });
   }
+
+  private void initTempButton(View view) {
+    Button clickButton = (Button) view.findViewById(R.id.match_more_messages);
+    clickButton.setOnClickListener( new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        ChatFragment chatFragment = ChatFragment.newInstance(matchId);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, chatFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+      }
+    });
+  }
+
 }
