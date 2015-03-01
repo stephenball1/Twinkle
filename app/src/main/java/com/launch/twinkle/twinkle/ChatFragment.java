@@ -81,7 +81,6 @@ public class ChatFragment extends ListFragment {
     super.onStart();
 
     String messageKey = MessageList.tableName + "/" + chatId + "/messageIds";
-    System.out.println(messageKey);
     this.mFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(messageKey);
     mUsername = "TEMP";
     // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
