@@ -105,9 +105,14 @@ public class ProfileSetupFragment extends Fragment {
         User user = new User(ApplicationState.getLoggedInUserId());
         user.set("profilePictureUrl", pictureUrls.get(firstSelectedIndex));
 
+        Intent pickFriends = new Intent(getActivity(),PickFBFriendsActivity.class);
+        getActivity().startActivity(pickFriends);
+
+        // TODO HACK optimally this could transition with closing Pick Friends Activity
         Fragment matchFragment = new MatchFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(android.R.id.content, matchFragment);
+
         transaction.addToBackStack(null);
         transaction.commit();
       }

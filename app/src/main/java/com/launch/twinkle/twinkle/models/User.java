@@ -23,6 +23,7 @@ public class User extends AbstractModel {
     this.id = id;
     firstName = (String) facebookProfile.get("first_name");
     lastName = (String) facebookProfile.get("last_name");
+    birthday = (String) facebookProfile.get("birthday");
   }
 
   public User(String id, String firstName, String lastName, String profilePictureUrl,

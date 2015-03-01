@@ -289,7 +289,7 @@ public class MatchFragment extends Fragment {
 
       @Override
       public void onClick(View v) {
-        ChatFragment chatFragment = ChatFragment.newInstance(matchId);
+        Fragment chatFragment = ChatFragment.newInstance(matchId);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
