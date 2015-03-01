@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,6 +160,15 @@ public class ChatFragment extends ListFragment {
 
             TextView matchAge = (TextView) finalView.findViewById(R.id.match_age);
             matchAge.setText(matchedUser.getAge() + " yrs old");
+
+            String url = matchedUser.getProfilePictureUrl();
+
+            new PictureLoaderTask(new BitmapRunnable() {
+              public void run() {
+                ImageView image = (ImageView) finalView.findViewById(R.id.snippet_profile_picture);
+                image.setImageBitmap(getBitmap());
+              }
+            }).execute(url);
           }
 
           @Override
