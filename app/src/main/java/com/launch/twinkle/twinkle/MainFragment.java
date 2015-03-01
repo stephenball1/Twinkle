@@ -85,6 +85,7 @@ public class MainFragment extends Fragment {
 
     initTempButton(view);
     initProfileSetupButton(view);
+    pickFriendsButton(view);
     return view;
   }
 
@@ -147,45 +148,34 @@ public class MainFragment extends Fragment {
     });
   }
 
-  private void initProfileSetupButton(View view) {
-      Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+  private void pickFriendsButton(View view) {
+      Button clickButton = (Button) view.findViewById(R.id.temp_button_3);
       clickButton.setOnClickListener( new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             Intent pickFriends= new Intent(getActivity(),PickFBFriendsActivity.class);
             getActivity().startActivity(pickFriends);
-            /*
-              Bundle bundle = new Bundle();
-              bundle.putString(FriendPickerFragment.USER_ID_BUNDLE_KEY, "10153082238072156");
-              bundle.putBoolean(FriendPickerFragment.MULTI_SELECT_BUNDLE_KEY, true);
-              bundle.putBoolean(FriendPickerFragment.SHOW_TITLE_BAR_BUNDLE_KEY, false);
-              FriendPickerFragment friendPickerFragment = new FriendPickerFragment(bundle);
-            // Set the listener to handle errors
-            friendPickerFragment.setOnErrorListener(new PickerFragment.OnErrorListener() {
-              @Override
-              public void onError(PickerFragment<?> fragment,
-                                  FacebookException error) {
-                System.out.println("friend picker error");
-              }
-            });
-            // Set the listener to handle button clicks
-            friendPickerFragment.setOnDoneButtonClickedListener(
-                new PickerFragment.OnDoneButtonClickedListener() {
-                  @Override
-                  public void onDoneButtonClicked(PickerFragment<?> fragment) {
-                    finishActivity();
-                  }
-                });
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-              transaction.replace(R.id.container, friendPickerFragment);
-              transaction.addToBackStack(null);
-              transaction.commit();
-
-            friendPickerFragment.loadData(false);
-            */
           }
       });
+
+  }
+
+  private void initProfileSetupButton(View view) {
+    Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+    clickButton.setOnClickListener( new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileSetupFragment chatFragment = new ProfileSetupFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, chatFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+      }
+    });
 
   }
 
