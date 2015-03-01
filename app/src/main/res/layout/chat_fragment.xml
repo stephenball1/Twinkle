@@ -24,7 +24,6 @@
       android:layout_marginLeft="45dp"
       android:paddingLeft="20dp"
       android:layout_centerVertical="true"
-      android:text="Emily K."
       android:textColor="#000000"
       android:textSize="22dp" />
 
@@ -36,7 +35,6 @@
       android:paddingLeft="15dp"
       android:layout_centerVertical="true"
       android:layout_alignBaseline="@+id/match_name"
-      android:text="24 yrs old"
       android:textColor="#B8B8B8"
       android:textSize="14dp" />
 
