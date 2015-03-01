@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity {
       System.out.println("action heart");
       Fragment matchFragment = new MatchFragment();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      transaction.replace(android.R.id.content, matchFragment);
+      transaction.replace(R.id.container, matchFragment);
       transaction.addToBackStack(null);
       transaction.commit();
       return true;
