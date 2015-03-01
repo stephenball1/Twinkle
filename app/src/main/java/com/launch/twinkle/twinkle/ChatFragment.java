@@ -175,6 +175,33 @@ public class ChatFragment extends ListFragment {
       public void onCancelled(FirebaseError firebaseError) {
       }
     });
+
+    String initialKey = "matches/" + chatId + "/initialUserId";
+    Firebase initialFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(initialKey);
+
+    initialFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        String initialUserId = (String) snapshot.getValue();
+        String userKey = "users/" + initialUserId;
+        Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(userKey);
+        userFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            User user = snapshot.getValue(User.class);
+            getActivity().getActionBar().setTitle(user.getDisplayName());
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
   }
 
   @Override
