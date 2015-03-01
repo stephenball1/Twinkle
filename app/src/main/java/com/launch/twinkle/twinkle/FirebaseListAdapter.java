@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @param <T> The class type to use as a model for the data contained in the children of the given Firebase location
  */
-public abstract class FirebaseListAdapter<T> extends BaseAdapter {
+public abstract class FirebaseListAdapter<T, U> extends BaseAdapter {
 
   private Query mRef;
   private Class<T> mModelClass;
@@ -38,6 +38,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
   private List<T> mModels;
   private Map<String, T> mModelKeys;
   private ChildEventListener mListener;
+  private List<U> mSecondaryModels;
 
 
   /**
@@ -54,6 +55,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     this.mLayout = mLayout;
     mInflater = activity.getLayoutInflater();
     mModels = new ArrayList<T>();
+    mSecondaryModels = new ArrayList<U>();
     mModelKeys = new HashMap<String, T>();
     // Look for all child events. We will then map them to our own internal ArrayList, which backs ListView
     mListener = this.mRef.addChildEventListener(new ChildEventListener() {
@@ -66,18 +68,21 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         // Insert into the correct location, based on previousChildName
         if (previousChildName == null) {
           mModels.add(0, model);
+          mSecondaryModels.add(0, null);
         } else {
           T previousModel = mModelKeys.get(previousChildName);
           int previousIndex = mModels.indexOf(previousModel);
           int nextIndex = previousIndex + 1;
           if (nextIndex == mModels.size()) {
             mModels.add(model);
+            mSecondaryModels.add(null);
           } else {
             mModels.add(nextIndex, model);
+            mSecondaryModels.add(nextIndex, null);
           }
         }
 
-        notifyDataSetChanged();
+        update(model);
       }
 
       @Override
@@ -90,9 +95,10 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         int index = mModels.indexOf(oldModel);
 
         mModels.set(index, newModel);
+        mSecondaryModels.set(index, null);
         mModelKeys.put(modelName, newModel);
 
-        notifyDataSetChanged();
+        update(newModel);
       }
 
       @Override
@@ -101,9 +107,12 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         // A model was removed from the list. Remove it from our list and the name mapping
         String modelName = dataSnapshot.getKey();
         T oldModel = mModelKeys.get(modelName);
-        mModels.remove(oldModel);
+        int removeIndex = mModels.indexOf(oldModel);
+        mModels.remove(removeIndex);
+        mSecondaryModels.remove(removeIndex);
+
         mModelKeys.remove(modelName);
-        notifyDataSetChanged();
+        update(null);
       }
 
       @Override
@@ -115,19 +124,23 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         T newModel = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
         int index = mModels.indexOf(oldModel);
         mModels.remove(index);
+        mSecondaryModels.remove(index);
         if (previousChildName == null) {
           mModels.add(0, newModel);
+          mSecondaryModels.add(0, null);
         } else {
           T previousModel = mModelKeys.get(previousChildName);
           int previousIndex = mModels.indexOf(previousModel);
           int nextIndex = previousIndex + 1;
           if (nextIndex == mModels.size()) {
             mModels.add(newModel);
+            mSecondaryModels.add(null);
           } else {
             mModels.add(nextIndex, newModel);
+            mSecondaryModels.add(nextIndex, null);
           }
         }
-        notifyDataSetChanged();
+        update(newModel);
       }
 
       @Override
@@ -142,6 +155,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     // We're being destroyed, let go of our mListener and forget about all of the mModels
     mRef.removeEventListener(mListener);
     mModels.clear();
+    mSecondaryModels.clear();
     mModelKeys.clear();
   }
 
@@ -167,8 +181,9 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     }
 
     T model = mModels.get(i);
+    U secondaryModel = mSecondaryModels.get(i);
     // Call out to subclass to marshall this model into the provided view
-    populateView(view, model);
+    populateView(view, model, secondaryModel);
     return view;
   }
 
@@ -181,5 +196,14 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
    * @param v     The view to populate
    * @param model The object containing the data used to populate the view
    */
-  protected abstract void populateView(View v, T model);
+  protected abstract void populateView(View v, T model, U secondaryModel);
+
+  protected void update(T model) {
+    notifyDataSetChanged();
+  }
+
+  protected void setSecondaryValue(T modelLookup, U value) {
+    int index = mModels.indexOf(modelLookup);
+    if (index >= 0) mSecondaryModels.add(index, value);
+  }
 }

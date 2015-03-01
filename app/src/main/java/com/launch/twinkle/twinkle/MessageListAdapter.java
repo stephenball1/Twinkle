@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class MessageListAdapter extends FirebaseListAdapter<String> {
+public class MessageListAdapter extends FirebaseListAdapter<String, Message> {
 
   // The mUsername for this client. We use this to indicate which messages originated from this user
   private String mUsername;
-  private List<Message> messages;
+  private String lookup;
 
   public MessageListAdapter(Query ref, Activity activity, int layout, String mUsername) {
     super(ref, String.class, layout, activity);
@@ -30,34 +30,40 @@ public class MessageListAdapter extends FirebaseListAdapter<String> {
   }
 
   @Override
-  protected void populateView(View view, String bool) {
-    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + bool);
+  protected void populateView(View view, String messageId, Message message) {
+    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
 
-    //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    //StrictMode.setThreadPolicy(policy);
-
+    TextView textView = (TextView) view.findViewById(R.id.message);
     final View finalView = view;
 
-    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot snapshot) {
-        // Map a Message object to an entry in our listview
-        Message message = snapshot.getValue(Message.class);
-        String messageText = message.getMessage();
-        String userId = message.getUserId();
-        /*TextView authorText = (TextView) finalView.findViewById(R.id.author);
-        // If the message was sent by this user, color it differently
-        if (userId != null && userId.equals(mUsername)) {
-          authorText.setTextColor(Color.RED);
-        } else {
-          authorText.setTextColor(Color.BLUE);
-        }*/
-        ((TextView) finalView.findViewById(R.id.message)).setText(messageText);
-      }
+    // In theory, when the message becomes not null, another render will be called
+    // (because we called notifyDataSetChanged below) and we will successfully have the
+    // message
+    if (message != null) {
+      textView.setText(message.getMessage());
+    }
+  }
 
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-      }
-    });
+  @Override
+  protected void update(final String messageId) {
+    if (messageId != null && messageId.length() > 0) {
+      Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
+      ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot snapshot) {
+          // Map a Message object to an entry in our listview
+          Message message = snapshot.getValue(Message.class);
+          setSecondaryValue(messageId, message);
+          notifyDataSetChanged();
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError) {
+        }
+      });
+    } else {
+      setSecondaryValue(messageId, null); // @sball I think I did this to handle deleted messages
+      notifyDataSetChanged();
+    }
   }
 }
