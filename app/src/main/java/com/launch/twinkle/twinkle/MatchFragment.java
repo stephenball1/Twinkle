@@ -211,13 +211,10 @@ public class MatchFragment extends Fragment {
     Button noButton = (Button) view.findViewById(R.id.no_button);
     noButton.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
+        System.out.println("here!");
         Fragment waitingFragment = new WaitingFragment();
-
-        Bundle bundle = new Bundle();
-        waitingFragment.setArguments(bundle);
-
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, waitingFragment);
+        transaction.replace(android.R.id.content, waitingFragment);
         transaction.addToBackStack(null);
         transaction.commit();
       }

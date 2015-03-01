@@ -4,8 +4,10 @@ import com.launch.twinkle.twinkle.models.*;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,8 +60,12 @@ public class MainActivity extends FragmentActivity {
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_heart) {
-      // TODO(judy): matches page.
       System.out.println("action heart");
+      Fragment matchFragment = new MatchFragment();
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(android.R.id.content, matchFragment);
+      transaction.addToBackStack(null);
+      transaction.commit();
       return true;
     } else if (id == R.id.action_chat) {
       // TODO(judy): circle of trust.

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,6 +58,8 @@ public class MainFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_main2, container, false);
 
     authButton = (LoginButton) view.findViewById(R.id.authButton);
+    authButton.setBackgroundColor(Color.parseColor("#E91E63"));
+    authButton.setAllCaps(false);
     authButton.setFragment(this);
     authButton.setReadPermissions(permissions);
 
@@ -65,20 +68,21 @@ public class MainFragment extends Fragment {
           public void onUserInfoFetched(GraphUser user) {
 
             if (user != null) {
-                  username.setText("You are currently logged in as " + user.getName());
-                  /*
-                  // Create new fragment and transaction.
-                  Fragment newFragment = new ProfileSetupFragment();
-                  Bundle bundle = new Bundle();
-                  bundle.putString("id", user.getId());
-                  newFragment.setArguments(bundle);
-                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                  transaction.replace(android.R.id.content, newFragment);
-                  transaction.addToBackStack(null);
-                  transaction.commit();
-                  */
+                getActivity().getActionBar().show();
+                //username.setText("You are currently logged in as " + user.getName());
+                // Create new fragment and transaction.
+              /*
+              TODO(judy or holman): Hook this up with instead of debug view.
+                ProfileSetupFragment profileFragment = new ProfileSetupFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, profileFragment);
+                transaction.addToBackStack(null);
+
+              // Commit the transaction
+              transaction.commit();
+              */
               } else {
-                  username.setText("You are not logged in.");
+                  username.setText("");
               }
           }
       });
@@ -88,6 +92,8 @@ public class MainFragment extends Fragment {
     initTempButton(view);
     initProfileSetupButton(view);
     pickFriendsButton(view);
+
+    getActivity().getActionBar().hide();
     return view;
   }
 
