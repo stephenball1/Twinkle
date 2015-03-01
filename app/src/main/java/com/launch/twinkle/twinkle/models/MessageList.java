@@ -1,5 +1,6 @@
 package com.launch.twinkle.twinkle.models;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,8 +21,8 @@ public class MessageList extends AbstractModel {
     return MessageList.tableName;
   }
 
-  public Set<String> getMessageIds() {
-    if (messageIds != null) messageIds.keySet();
-    return null;
+  public Map<String, String> getMessageIds() {
+    if (messageIds != null) return messageIds;
+    return new HashMap<String, String>();
   }
 }

@@ -1,5 +1,7 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.Message;
+import com.launch.twinkle.twinkle.models.MessageList;
 import com.launch.twinkle.twinkle.models.User;
 
 import java.net.URL;
@@ -9,6 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
@@ -55,6 +58,7 @@ public class MatchFragment extends Fragment {
   // match user id, Name, age, comment, commenter user id, number of messages.
   private List<String> templateData = new ArrayList<String>();
   private View view;
+  private String matchId;
 
   public MatchFragment() {
     templateData.add("10153082238072156");
@@ -74,7 +78,7 @@ public class MatchFragment extends Fragment {
     idFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
-        String matchId = (String) snapshot.getValue();
+        matchId = (String) snapshot.getValue();
         String matchKey = "matches/" + matchId + "/matchedUserId";
         Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
         matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -123,10 +127,35 @@ public class MatchFragment extends Fragment {
       e.printStackTrace();
     }
 
+    // Get first message
+    //
+    // Get message count
+    String key = "messageLists/" + matchId;
+    Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(key);
+    userFirebaseRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        MessageList list = snapshot.getValue(MessageList.class);
+
+        if (list == null) {
+          Message message = new Message("", ApplicationState.getLoggedInUserId(), "What do you guys think?");
+          message.create();
+          list = new MessageList(matchId);
+          list.pushToChildList("messageIds", message.getId());
+        } else {
+          TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
+          Map<String, String> messageIds = list.getMessageIds();
+          matchMoreMessages.setText(messageIds.size() + " messages");
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
+
     TextView matchMessage = (TextView) view.findViewById(R.id.message);
     matchMessage.setText(templateData.get(3));
-    TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
-    matchMoreMessages.setText(templateData.get(5));
     setPage(templateData.get(0), (ImageView) view.findViewById(R.id.match_picture));
     setPage(templateData.get(4), (ImageView) view.findViewById(R.id.profile_picture));
   }
