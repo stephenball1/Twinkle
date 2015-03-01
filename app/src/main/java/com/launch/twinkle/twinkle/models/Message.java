@@ -1,7 +1,7 @@
 package com.launch.twinkle.twinkle.models;
 
 public class Message extends AbstractModel {
-
+  public static String tableName = "messages";
   private String id;
   private String message;
   private String userId;
@@ -18,7 +18,7 @@ public class Message extends AbstractModel {
 
   @Override
   protected String getTableName() {
-    return "messages";
+    return Message.tableName;
   }
 
   public String getUserId() { return userId; }

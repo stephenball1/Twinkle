@@ -77,7 +77,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
           }
         }
 
-        notifyDataSetChanged();
+        update(model);
       }
 
       @Override
@@ -92,7 +92,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         mModels.set(index, newModel);
         mModelKeys.put(modelName, newModel);
 
-        notifyDataSetChanged();
+        update(newModel);
       }
 
       @Override
@@ -103,7 +103,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         T oldModel = mModelKeys.get(modelName);
         mModels.remove(oldModel);
         mModelKeys.remove(modelName);
-        notifyDataSetChanged();
+        update(null);
       }
 
       @Override
@@ -127,7 +127,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             mModels.add(nextIndex, newModel);
           }
         }
-        notifyDataSetChanged();
+        update(newModel);
       }
 
       @Override
@@ -170,6 +170,10 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     // Call out to subclass to marshall this model into the provided view
     populateView(view, model);
     return view;
+  }
+
+  protected void update(T model) {
+    notifyDataSetChanged();
   }
 
   /**

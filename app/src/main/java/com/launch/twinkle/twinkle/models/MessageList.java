@@ -1,10 +1,12 @@
 package com.launch.twinkle.twinkle.models;
 
 import java.util.Map;
+import java.util.Set;
 
 public class MessageList extends AbstractModel {
+  public static String tableName = "messageLists";
 
-  private Map<String, Boolean> messageIds;
+  private Map<String, Object> messageIds;
 
   // Required default constructor for Firebase object mapping
   private MessageList() {
@@ -15,7 +17,11 @@ public class MessageList extends AbstractModel {
   }
 
   @Override protected String getTableName() {
-    return "messageLists";
+    return MessageList.tableName;
   }
 
+  public Set<String> getMessageIds() {
+    if (messageIds != null) messageIds.keySet();
+    return null;
+  }
 }
