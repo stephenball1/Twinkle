@@ -82,6 +82,7 @@
       android:paddingLeft="10dp"
       android:paddingRight="10dp"
       android:text="No"
+      android:textColor="@android:color/white"
       android:textAllCaps="false"
       android:textSize="20dp" />
 
@@ -95,6 +96,7 @@
       android:paddingRight="10dp"
       android:text="Yes"
       android:textAllCaps="false"
+      android:textColor="@android:color/white"
       android:textSize="20dp" />
   </LinearLayout>
 
