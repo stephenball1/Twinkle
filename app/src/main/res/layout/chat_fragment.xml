@@ -9,7 +9,8 @@
     android:layout_height="wrap_content"
     android:layout_above="@+id/messageListFooter"
     android:layout_alignParentTop="true"
-    android:transcriptMode="alwaysScroll" />
+    android:transcriptMode="alwaysScroll"
+    android:divider="#00000000" />
 
   <LinearLayout
     android:id="@+id/messageListFooter"
@@ -23,9 +24,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:inputType="textShortMessage"
-      android:lines="1"
-      android:singleLine="true" />
+      android:inputType="textCapSentences|textAutoCorrect"/>
 
     <ImageButton
       android:id="@+id/sendButton"
