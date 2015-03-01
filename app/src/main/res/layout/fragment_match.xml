@@ -44,10 +44,18 @@
             android:textSize="18dp" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp">
+
+    </LinearLayout>
+
   <include layout="@layout/chat_message"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:layout_below="@+id/name_block"/>
+           android:layout_below="@+id/name_block"
+           android:layout_marginTop="25dp"/>
   <Button
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -88,5 +96,21 @@
       android:textAllCaps="false"
       android:textSize="20dp" />
   </LinearLayout>
+
+    <com.launch.twinkle.twinkle.CircleImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="225dp"
+        android:src="@drawable/purple_background"
+        android:layout_centerHorizontal="true" />
+    <ImageView
+        android:id="@+id/chat_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="234dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/chat" />
 
 </RelativeLayout>
