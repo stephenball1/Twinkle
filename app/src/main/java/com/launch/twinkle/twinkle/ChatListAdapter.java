@@ -47,8 +47,7 @@ public class ChatListAdapter extends FirebaseListAdapter<String, ChatPreview> {
       User matchedUser = preview.getMatchedUser();
       User initialUser = preview.getInitialUser();
       if (message != null && matchedUser != null && initialUser != null) {
-        textView.setText(initialUser.getDisplayName() + " has been matched with " + matchedUser.getDisplayName() +
-            "\n\nLast message: " + message.getMessage());
+        textView.setText(initialUser.getDisplayName());
       }
 
       Bitmap matchedUserBitmap = preview.getMatchedUserBitmap();

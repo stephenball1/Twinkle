@@ -34,6 +34,19 @@ public class ChatFragment extends ListFragment {
     ChatFragment f = new ChatFragment();
     Bundle args = new Bundle();
     args.putString("chatId", chatId);
+    args.putString("firstName", "");
+    args.putString("lastName", "");
+    f.setArguments(args);
+
+    return f;
+  }
+
+  static ChatFragment newInstance(String chatId, String firstName, String lastName) {
+    ChatFragment f = new ChatFragment();
+    Bundle args = new Bundle();
+    args.putString("chatId", chatId);
+    args.putString("firstName", firstName);
+    args.putString("lastName", lastName);
     f.setArguments(args);
 
     return f;
@@ -42,7 +55,16 @@ public class ChatFragment extends ListFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    chatId = getArguments() != null ? getArguments().getString("chatId") : "ERRRRRRR";
+    if (getArguments() != null) {
+      chatId = getArguments().getString("chatId");
+      String firstName = getArguments().getString("firstName");
+      String lastName = getArguments().getString("lastName");
+      getActivity().getActionBar().setTitle(firstName + " " + lastName);
+      System.out.println("Name: " + firstName + " " + lastName);
+    } else {
+      chatId = "ERRRRRR";
+    }
+
   }
 
   @Override
