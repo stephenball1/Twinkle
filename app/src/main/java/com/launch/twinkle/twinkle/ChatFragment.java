@@ -70,7 +70,7 @@ public class ChatFragment extends ListFragment {
 
       // Add it to this list
       MessageList messageList = new MessageList(chatId);
-      messageList.addToChildSet("messageIds", message.getId());
+      messageList.pushToChildList("messageIds", message.getId());
 
       input.setText("");
     }
@@ -80,14 +80,14 @@ public class ChatFragment extends ListFragment {
   public void onStart() {
     super.onStart();
 
-    // TODO plug this in
-    String messageKey = MessageList.tableName;
+    String messageKey = MessageList.tableName + "/" + chatId + "/messageIds";
+    System.out.println(messageKey);
     this.mFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(messageKey);
     mUsername = "TEMP";
     // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
     final ListView listView = getListView();
     // Tell our list adapter that we only want 50 messages at a time
-    mMessageListAdapter = new MessageListAdapter(mFirebaseRef, getActivity(), R.layout.chat_message, mUsername);
+    mMessageListAdapter = new MessageListAdapter(mFirebaseRef.limitToFirst(50), getActivity(), R.layout.chat_message, mUsername);
     listView.setAdapter(mMessageListAdapter);
     mMessageListAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override

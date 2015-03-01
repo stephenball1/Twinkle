@@ -8,6 +8,7 @@ public class User extends AbstractModel {
   private String firstName;
   private String lastName;
   private String profilePictureUrl;
+  private Map<String, Boolean> matchIds;
 
   public User(String id) {
     this.id = id;
