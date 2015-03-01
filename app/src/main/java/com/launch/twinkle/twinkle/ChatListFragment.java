@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -102,30 +101,11 @@ public class ChatListFragment extends ListFragment {
         transaction.commit();
       }
     });
-
-    // Finally, a little indication of connection status
-    mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
-        boolean connected = (Boolean) dataSnapshot.getValue();
-        if (connected) {
-          Toast.makeText(getActivity(), "Connected to Firebase", Toast.LENGTH_SHORT).show();
-        } else {
-          Toast.makeText(getActivity(), "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-        }
-      }
-
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-        // No-op
-      }
-    });
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
     mListAdapter.cleanup();
   }
 }
