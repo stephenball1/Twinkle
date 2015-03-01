@@ -148,7 +148,7 @@ public class MainFragment extends Fragment {
       clickButton.setOnClickListener( new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              Fragment newFragment = new ProfileSetupFragment();
+              Fragment newFragment = new MatchFragment();
 
               Bundle bundle = new Bundle();
               newFragment.setArguments(bundle);
