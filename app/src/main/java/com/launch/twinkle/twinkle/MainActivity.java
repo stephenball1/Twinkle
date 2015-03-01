@@ -5,9 +5,9 @@ import com.launch.twinkle.twinkle.models.*;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,8 +68,13 @@ public class MainActivity extends FragmentActivity {
       transaction.commit();
       return true;
     } else if (id == R.id.action_chat) {
-      // TODO(judy): circle of trust.
-      System.out.println("action chat");
+      Fragment chatListFragment = ChatListFragment.newInstance();
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(R.id.container, chatListFragment);
+
+      transaction.addToBackStack(null);
+      transaction.commit();
+
       return true;
     } else if (id == R.id.action_setting) {
       // TODO(judy): setting;

@@ -10,6 +10,7 @@ public class User extends AbstractModel {
   private String profilePictureUrl;
   private String matchId;
   private String birthday = "03/11/1980";
+  private Map<String, String> chatIds;
 
   // Required default constructor for Firebase object mapping
   protected User() {
@@ -36,6 +37,10 @@ public class User extends AbstractModel {
     this.matchId = matchId;
   }
 
+  public String getDisplayName() {
+    return firstName + " " + lastName.charAt(0);
+  }
+
   public String getLastName() {
     return lastName;
   }
@@ -54,6 +59,14 @@ public class User extends AbstractModel {
 
   public String getBirthday() {
     return birthday;
+  }
+
+  public Map<String, String> getChatIds() {
+    if (chatIds != null) {
+      return chatIds;
+    } else {
+      return new HashMap<String, String>();
+    }
   }
 
   public void updateInfo() {

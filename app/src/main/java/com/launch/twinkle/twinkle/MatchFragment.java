@@ -8,7 +8,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -110,7 +109,7 @@ public class MatchFragment extends Fragment {
 
   public void setMatchingPage(User user) {
     TextView matchName = (TextView) view.findViewById(R.id.match_name);
-    matchName.setText(user.getFirstName() + " " + user.getLastName().charAt(0));
+    matchName.setText(user.getDisplayName());
     TextView matchAge = (TextView) view.findViewById(R.id.match_age);
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -143,7 +142,7 @@ public class MatchFragment extends Fragment {
           LinkedHashMap<String, String> messageIds = list.getMessageIds();
           matchMoreMessages.setText(messageIds.size() + " more messages");
 
-          TreeMap<String, String> sorted = sortByValue(messageIds);
+          TreeMap<String, String> sorted = Utils.sortByValue(messageIds);
           Object[] texts = sorted.values().toArray();
           String text = (String) texts[messageIds.size() - 1];
           populateMessage(text);
@@ -298,26 +297,5 @@ public class MatchFragment extends Fragment {
       }
     });
   }
-
-  public TreeMap<String, String> sortByValue(HashMap<String, String> map) {
-    ValueComparator vc =  new ValueComparator(map);
-    TreeMap<String, String> sortedMap = new TreeMap<String, String>(vc);
-    sortedMap.putAll(map);
-    return sortedMap;
-  }
-
-  class ValueComparator implements Comparator<String> {
-
-    Map<String, String> map;
-
-    public ValueComparator(Map<String, String> base) {
-      this.map = base;
-    }
-
-    public int compare(String a, String b) {
-      return map.get(a).compareTo(map.get(b));
-    }
-  }
-
 
 }
