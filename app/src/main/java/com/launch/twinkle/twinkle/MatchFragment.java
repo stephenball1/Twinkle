@@ -5,10 +5,8 @@ import com.launch.twinkle.twinkle.models.MessageList;
 import com.launch.twinkle.twinkle.models.User;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -110,17 +108,9 @@ public class MatchFragment extends Fragment {
   public void setMatchingPage(User user) {
     TextView matchName = (TextView) view.findViewById(R.id.match_name);
     matchName.setText(user.getDisplayName());
-    TextView matchAge = (TextView) view.findViewById(R.id.match_age);
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-    try {
-      Date birthday = sdf.parse(user.getBirthday());
-      Date today = new Date();
-      long diff = today.getYear() - birthday.getYear();
-      matchAge.setText(diff + " yrs old");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    TextView matchAge = (TextView) view.findViewById(R.id.match_age);
+    matchAge.setText(user.getAge() + " yrs old");
 
     // Get first message
     //

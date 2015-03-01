@@ -20,12 +20,11 @@
 
     <ImageView
         android:id="@+id/chat_icon"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
         android:layout_gravity="top"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher"
-        android:layout_marginTop="140dp"
+        android:src="@drawable/circl_splash_text"
+        android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true" />
 
     <com.facebook.widget.LoginButton
