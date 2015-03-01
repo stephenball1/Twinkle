@@ -68,6 +68,7 @@ public class MainActivity extends FragmentActivity {
       transaction.commit();
       return true;
     } else if (id == R.id.action_chat) {
+      getActionBar().setTitle("Circles");
       Fragment chatListFragment = ChatListFragment.newInstance();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.container, chatListFragment);
