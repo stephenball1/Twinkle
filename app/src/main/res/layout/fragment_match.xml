@@ -12,8 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="180dp"
         android:layout_gravity="top"
-        android:scaleType="centerCrop"
-        android:src="@drawable/profile_test" />
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

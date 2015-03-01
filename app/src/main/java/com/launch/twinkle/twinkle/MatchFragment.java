@@ -81,23 +81,22 @@ public class MatchFragment extends Fragment {
 
     addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
-      public void onDataChange (DataSnapshot snapshot){
+      public void onDataChange(DataSnapshot snapshot) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         String url = (String) snapshot.getValue();
         try {
-          URL imageURL = new URL(url);
+          PictureLoaderTask pictureLoaderTask = new PictureLoaderTask();
+          pictureLoaderTask.execute(url, imageView);
 
-          Bitmap image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-          imageView.setImageBitmap(image);
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
 
       @Override
-      public void onCancelled (FirebaseError firebaseError){
+      public void onCancelled(FirebaseError firebaseError) {
       }
     });
   }
@@ -115,8 +114,6 @@ public class MatchFragment extends Fragment {
     getActivity().getActionBar().setTitle("Today's Match");
     getActivity().invalidateOptionsMenu();
 
-    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    StrictMode.setThreadPolicy(policy);
     setMatchingPage();
     return view;
   }

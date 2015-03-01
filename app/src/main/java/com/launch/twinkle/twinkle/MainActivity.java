@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
-    // getMenuInflater().inflate(R.menu.menu_main, menu);
+    getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
@@ -57,7 +57,17 @@ public class MainActivity extends FragmentActivity {
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
+    if (id == R.id.action_heart) {
+      // TODO(judy): matches page.
+      System.out.println("action heart");
+      return true;
+    } else if (id == R.id.action_chat) {
+      // TODO(judy): circle of trust.
+      System.out.println("action chat");
+      return true;
+    } else if (id == R.id.action_setting) {
+      // TODO(judy): setting;
+      System.out.println("action setting");
       return true;
     }
 
