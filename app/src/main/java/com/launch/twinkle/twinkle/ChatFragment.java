@@ -70,7 +70,7 @@ public class ChatFragment extends ListFragment {
 
       // Add it to this list
       MessageList messageList = new MessageList(chatId);
-      messageList.pushToChildList("messageIds", message.getId());
+      messageList.addToChildSet("messageIds", message.getId());
 
       input.setText("");
     }
