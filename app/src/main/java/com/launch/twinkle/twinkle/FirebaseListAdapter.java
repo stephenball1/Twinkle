@@ -179,6 +179,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
     T model = mModels.get(i);
     String modelName = mKeys.get(i);
+    System.out.println(i + " " + modelName);
     // Call out to subclass to marshall this model into the provided view
     populateView(view, modelName, model);
     return view;

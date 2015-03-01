@@ -36,6 +36,8 @@ public class MessageListAdapter extends FirebaseListAdapter<Boolean> {
     //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     //StrictMode.setThreadPolicy(policy);
 
+    ((TextView) view.findViewById(R.id.message)).setText(messageId);
+    /*
     final View finalView = view;
     final String finalMessageId = messageId;
 
@@ -61,5 +63,6 @@ public class MessageListAdapter extends FirebaseListAdapter<Boolean> {
       public void onCancelled(FirebaseError firebaseError) {
       }
     });
+    */
   }
 }

@@ -87,7 +87,7 @@ public class ChatFragment extends ListFragment {
     // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
     final ListView listView = getListView();
     // Tell our list adapter that we only want 50 messages at a time
-    mMessageListAdapter = new MessageListAdapter(mFirebaseRef.orderByKey(), getActivity(), R.layout.chat_message, mUsername);
+    mMessageListAdapter = new MessageListAdapter(mFirebaseRef.limitToFirst(50), getActivity(), R.layout.chat_message, mUsername);
     listView.setAdapter(mMessageListAdapter);
     mMessageListAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override
