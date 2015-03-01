@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.launch.twinkle.twinkle.MatchFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F8F8F8">
 
     <ImageView
         android:id="@+id/match_picture"
@@ -55,13 +56,40 @@
             android:paddingRight="10dp"
             android:textAllCaps="false"/>
         </RelativeLayout>
-
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width=""
-        android:layout_height="">
-        </RelativeLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp">
+        <TextView
+            android:id="@+id/match_age"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_alignParentRight="true"
+            android:text="Ian, she seems like a really nice girl. You definitely should at least go out for a cup of tea ..."
+            android:textColor="#B8B8B8"
+            android:textSize="18dp"
+            android:paddingTop="17dp"
+            android:background="#FFFFFF"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="7 More Thoughts in your Circle"
+            android:background="@color/primary"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textAllCaps="false"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -88,5 +116,6 @@
             android:textAllCaps="false"
             android:layout_weight="1"/>
     </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
