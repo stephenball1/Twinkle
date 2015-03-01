@@ -1,10 +1,21 @@
 package com.launch.twinkle.twinkle;
 
+import com.launch.twinkle.twinkle.models.Message;
+import com.launch.twinkle.twinkle.models.MessageList;
+import com.launch.twinkle.twinkle.models.User;
+
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -48,29 +59,103 @@ import org.json.JSONObject;
 public class MatchFragment extends Fragment {
   private static final String TAG = MatchFragment.class.getSimpleName();
   // match user id, Name, age, comment, commenter user id, number of messages.
-  private List<String> templateData = new ArrayList<String>();
   private View view;
+  private String matchId;
 
   public MatchFragment() {
-    templateData.add("10153082238072156");
-    templateData.add("Holman G");
-    templateData.add("25 yrs old");
-    templateData.add("Ian, she seems like a really nice girl.");
-    templateData.add("10153082238072156");
-    templateData.add("6 more messages");
   }
 
-  public void setMatchingPage() {
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    String idKey = "users/" + ApplicationState.getLoggedInUserId() + "/matchId";
+    Firebase idFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(idKey);
+    idFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        matchId = (String) snapshot.getValue();
+        String matchKey = "matches/" + matchId + "/matchedUserId";
+        Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
+        matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            String matchedUserId = (String) snapshot.getValue();
+            String userKey = "users/" + matchedUserId;
+            Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(userKey);
+            userFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot snapshot) {
+                User matchedUser = snapshot.getValue(User.class);
+                setMatchingPage(matchedUser);
+              }
+
+              @Override
+              public void onCancelled(FirebaseError firebaseError) {
+              }
+            });
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
+  }
+
+  public void setMatchingPage(User user) {
     TextView matchName = (TextView) view.findViewById(R.id.match_name);
-    matchName.setText(templateData.get(1));
+    matchName.setText(user.getFirstName() + " " + user.getLastName().charAt(0));
     TextView matchAge = (TextView) view.findViewById(R.id.match_age);
-    matchAge.setText(templateData.get(2));
-    TextView matchMessage = (TextView) view.findViewById(R.id.message);
-    matchMessage.setText(templateData.get(3));
-    TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
-    matchMoreMessages.setText(templateData.get(5));
-    setPage(templateData.get(0), (ImageView) view.findViewById(R.id.match_picture));
-    setPage(templateData.get(4), (ImageView) view.findViewById(R.id.profile_picture));
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    try {
+      Date birthday = sdf.parse(user.getBirthday());
+      Date today = new Date();
+      long diff = today.getYear() - birthday.getYear();
+      matchAge.setText(diff + " yrs old");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    // Get first message
+    //
+    // Get message count
+    String key = "messageLists/" + matchId;
+    Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(key);
+    userFirebaseRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        MessageList list = snapshot.getValue(MessageList.class);
+
+        if (list == null) {
+          Message message = new Message("", ApplicationState.getLoggedInUserId(), "What do you guys think?");
+          message.create();
+          list = new MessageList(matchId);
+          list.pushToChildList("messageIds", message.getId());
+        } else {
+          TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
+          LinkedHashMap<String, String> messageIds = list.getMessageIds();
+          matchMoreMessages.setText(messageIds.size() + " more messages");
+
+          TreeMap<String, String> sorted = sortByValue(messageIds);
+          Object[] texts = sorted.values().toArray();
+          String text = (String) texts[messageIds.size() - 1];
+          populateMessage(text);
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
+
+    setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture));
   }
 
   public void setPage(String userId, final ImageView imageView) {
@@ -115,8 +200,6 @@ public class MatchFragment extends Fragment {
     getActivity().getActionBar().setTitle("Today's Match");
     getActivity().invalidateOptionsMenu();
 
-    setMatchingPage();
-
     Button yesButton = (Button) view.findViewById(R.id.yes_button);
     yesButton.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
@@ -139,6 +222,7 @@ public class MatchFragment extends Fragment {
         transaction.commit();
       }
     });
+    initTempButton(view);
     return view;
   }
 
@@ -178,4 +262,65 @@ public class MatchFragment extends Fragment {
     protected void onPostExecute(Void result) {
     }
   }
+
+  private void populateMessage(String messageId) {
+    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
+    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        // Map a Message object to an entry in our listview
+        Message message = snapshot.getValue(Message.class);
+        final MessageWithImage messageWithImage = new MessageWithImage(message);
+        TextView matchMessage = (TextView) view.findViewById(R.id.message);
+        matchMessage.setText(message.getMessage());
+
+        setPage(message.getUserId(), (ImageView) view.findViewById(R.id.profile_picture));
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
+  }
+
+  private void initTempButton(View view) {
+    Button clickButton = (Button) view.findViewById(R.id.match_more_messages);
+    clickButton.setOnClickListener( new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        ChatFragment chatFragment = ChatFragment.newInstance(matchId);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, chatFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+      }
+    });
+  }
+
+  public TreeMap<String, String> sortByValue(HashMap<String, String> map) {
+    ValueComparator vc =  new ValueComparator(map);
+    TreeMap<String, String> sortedMap = new TreeMap<String, String>(vc);
+    sortedMap.putAll(map);
+    return sortedMap;
+  }
+
+  class ValueComparator implements Comparator<String> {
+
+    Map<String, String> map;
+
+    public ValueComparator(Map<String, String> base) {
+      this.map = base;
+    }
+
+    public int compare(String a, String b) {
+      return map.get(a).compareTo(map.get(b));
+    }
+  }
+
+
 }

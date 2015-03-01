@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:paddingTop="15dp"
-            android:text="Emily K."
             android:textColor="#000000"
             android:textSize="28dp" />
 
@@ -38,7 +37,6 @@
             android:layout_alignParentRight="true"
             android:paddingRight="15dp"
             android:paddingTop="22dp"
-            android:text="24 yrs old"
             android:textColor="#B8B8B8"
             android:textSize="18dp" />
     </RelativeLayout>
@@ -64,7 +62,6 @@
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
     android:background="@color/primary"
-    android:text="12 more messages"
     android:textAllCaps="false"
     android:textSize="18dp" />
 

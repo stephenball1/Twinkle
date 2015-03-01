@@ -4,10 +4,14 @@ import java.util.Map;
 
 public class Match extends AbstractModel {
 
-  private Map<String, String> userIds;
+  private String matchedUserId;
 
   // Required default constructor for Firebase object mapping
   private Match() {
+  }
+
+  public String getMatchedUserId() {
+    return matchedUserId;
   }
 
   @Override protected String getTableName() {

@@ -8,26 +8,31 @@ public class User extends AbstractModel {
   private String firstName;
   private String lastName;
   private String profilePictureUrl;
-  private Map<String, String> matchIds;
+  private String matchId;
+  private String birthday = "03/11/1980";
+
+  // Required default constructor for Firebase object mapping
+  protected User() {
+  }
 
   public User(String id) {
     this.id = id;
   }
 
-  public User(String id, Map<String, String> facebookProfile) {
+  public User(String id, Map<String, Object> facebookProfile) {
     this.id = id;
-    firstName = facebookProfile.get("first_name");
-    lastName = facebookProfile.get("last_name");
+    firstName = (String) facebookProfile.get("first_name");
+    lastName = (String) facebookProfile.get("last_name");
   }
 
   public User(String id, String firstName, String lastName, String profilePictureUrl,
-      Map<String, String> matchIds) {
+      String matchId) {
 
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.profilePictureUrl = profilePictureUrl;
-    this.matchIds = matchIds;
+    this.matchId = matchId;
   }
 
   public String getLastName() {
@@ -42,10 +47,20 @@ public class User extends AbstractModel {
     return profilePictureUrl;
   }
 
+  public String getMatchId() {
+    return matchId;
+  }
+
+  public String getBirthday() {
+    return birthday;
+  }
+
   public void updateInfo() {
     Map<String, Object> values = new HashMap<String, Object>();
+    values.put("id", id);
     values.put("firstName", firstName);
     values.put("lastName", lastName);
+    values.put("birthday", birthday);
     update(values);
   }
 

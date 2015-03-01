@@ -177,6 +177,7 @@ public class ProfileSetupFragment extends Fragment {
         try {
           JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
           System.out.println("hi2");
+          System.out.println(albumArr.toString());
           for (int i = 0; i < albumArr.length(); i++) {
             JSONObject item = albumArr.getJSONObject(i);
             System.out.println("type:" + item.getString("type"));

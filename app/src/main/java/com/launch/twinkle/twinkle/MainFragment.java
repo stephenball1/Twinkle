@@ -1,5 +1,8 @@
 package com.launch.twinkle.twinkle;
 
+import com.facebook.FacebookException;
+import com.facebook.widget.FriendPickerFragment;
+import com.facebook.widget.PickerFragment;
 import com.launch.twinkle.twinkle.models.User;
 
 import java.util.Arrays;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FriendPickerFragment;
+import com.facebook.widget.PickerFragment;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
@@ -33,11 +38,10 @@ public class MainFragment extends Fragment {
   private UiLifecycleHelper uiHelper;
   private TextView username;
   private LoginButton authButton;
-
   private final List<String> permissions;
 
   public MainFragment() {
-    permissions = Arrays.asList("public_profile,email,user_friends,user_status");
+    permissions = Arrays.asList("public_profile,user_birthday,email,user_friends,user_status");
   }
 
   @Override
@@ -81,6 +85,7 @@ public class MainFragment extends Fragment {
 
     initTempButton(view);
     initProfileSetupButton(view);
+    pickFriendsButton(view);
     return view;
   }
 
@@ -143,22 +148,34 @@ public class MainFragment extends Fragment {
     });
   }
 
-  private void initProfileSetupButton(View view) {
-      Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+  private void pickFriendsButton(View view) {
+      Button clickButton = (Button) view.findViewById(R.id.temp_button_3);
       clickButton.setOnClickListener( new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              Fragment newFragment = new MatchFragment();
-
-              Bundle bundle = new Bundle();
-              newFragment.setArguments(bundle);
-
-              FragmentTransaction transaction = getFragmentManager().beginTransaction();
-              transaction.replace(R.id.container, newFragment);
-              transaction.addToBackStack(null);
-              transaction.commit();
+            Intent pickFriends= new Intent(getActivity(),PickFBFriendsActivity.class);
+            getActivity().startActivity(pickFriends);
           }
       });
+
+  }
+
+  private void initProfileSetupButton(View view) {
+    Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
+    clickButton.setOnClickListener( new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileSetupFragment chatFragment = new ProfileSetupFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, chatFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+      }
+    });
 
   }
 
@@ -172,7 +189,7 @@ public class MainFragment extends Fragment {
         public void onAuthenticated(AuthData authData) {
           // The Facebook user is now authenticated with Firebase
           Map<String, Object> providerData = authData.getProviderData();
-          Map<String, String> facebookProfile = (Map<String, String>) providerData.get("cachedUserProfile");
+          Map<String, Object> facebookProfile = (Map<String, Object>) providerData.get("cachedUserProfile");
           User user = new User((String) providerData.get("id"), facebookProfile);
           user.updateInfo();
         }

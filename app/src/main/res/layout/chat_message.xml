@@ -17,7 +17,6 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:minHeight="35dp"
-    android:text="Ian...... "
     android:textColor="#000000"
     android:textSize="18dp"
     android:layout_centerVertical="true"
