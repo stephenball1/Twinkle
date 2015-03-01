@@ -7,8 +7,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="false"
-    android:transcriptMode="alwaysScroll"
-    android:divider="@android:color/transparent"
-    android:listSelector="@android:color/transparent"/>
+    android:transcriptMode="alwaysScroll"/>
 
 </RelativeLayout>
