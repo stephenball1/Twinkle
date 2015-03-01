@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8D8D8"
+    android:background="#EEEEEE"
     android:orientation="vertical"
     tools:context="com.launch.twinkle.twinkle.MatchFragment">
 
@@ -57,6 +57,7 @@
            android:layout_below="@+id/name_block"
            android:layout_marginTop="25dp"/>
   <Button
+    android:id="@+id/match_more_messages"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
@@ -105,9 +106,9 @@
         android:layout_centerHorizontal="true" />
     <ImageView
         android:id="@+id/chat_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="234dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="238dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
         android:scaleType="centerCrop"

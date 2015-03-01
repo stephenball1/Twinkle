@@ -36,14 +36,70 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MatchFragment extends Fragment {
   private static final String TAG = MatchFragment.class.getSimpleName();
+  // match user id, Name, age, comment, commenter user id, number of messages.
+  private List<String> templateData = new ArrayList<String>();
+  private View view;
 
   public MatchFragment() {
+    templateData.add("10153082238072156");
+    templateData.add("Holman G");
+    templateData.add("25 yrs old");
+    templateData.add("Ian, she seems like a really nice girl.");
+    templateData.add("10153082238072156");
+    templateData.add("6 more messages");
+  }
+
+  public void setMatchingPage() {
+    TextView matchName = (TextView) view.findViewById(R.id.match_name);
+    matchName.setText(templateData.get(1));
+    TextView matchAge = (TextView) view.findViewById(R.id.match_age);
+    matchAge.setText(templateData.get(2));
+    TextView matchMessage = (TextView) view.findViewById(R.id.message);
+    matchMessage.setText(templateData.get(3));
+    TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
+    matchMoreMessages.setText(templateData.get(5));
+    setPage(templateData.get(0), (ImageView) view.findViewById(R.id.match_picture));
+    setPage(templateData.get(4), (ImageView) view.findViewById(R.id.profile_picture));
+  }
+
+  public void setPage(String userId, final ImageView imageView) {
+
+    // Proof of concept for binding to picture
+    String pictureKey = "users/" + userId + "/profilePictureUrl";
+    Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+    userFirebaseRef.child(pictureKey).
+
+    addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange (DataSnapshot snapshot){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        String url = (String) snapshot.getValue();
+        try {
+          URL imageURL = new URL(url);
+
+          Bitmap image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+          imageView.setImageBitmap(image);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+      @Override
+      public void onCancelled (FirebaseError firebaseError){
+      }
+    });
   }
 
   @Override
@@ -54,11 +110,14 @@ public class MatchFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_match, container, false);
+    view = inflater.inflate(R.layout.fragment_match, container, false);
 
     getActivity().getActionBar().setTitle("Today's Match");
     getActivity().invalidateOptionsMenu();
 
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+    setMatchingPage();
     return view;
   }
 
