@@ -9,7 +9,7 @@ public class User extends AbstractModel {
   private String lastName;
   private String profilePictureUrl;
   private String matchId;
-  private String birthday;
+  private String birthday = "03/11/1980";
 
   // Required default constructor for Firebase object mapping
   protected User() {
@@ -57,6 +57,7 @@ public class User extends AbstractModel {
 
   public void updateInfo() {
     Map<String, Object> values = new HashMap<String, Object>();
+    values.put("id", id);
     values.put("firstName", firstName);
     values.put("lastName", lastName);
     values.put("birthday", birthday);

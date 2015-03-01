@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -144,8 +145,12 @@ public class MatchFragment extends Fragment {
           list.pushToChildList("messageIds", message.getId());
         } else {
           TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
-          Map<String, String> messageIds = list.getMessageIds();
+          LinkedHashMap<String, String> messageIds = list.getMessageIds();
           matchMoreMessages.setText(messageIds.size() + " messages");
+
+          Object[] texts = messageIds.values().toArray();
+          String text = (String) texts[messageIds.size() - 1];
+          populateMessage(text);
         }
       }
 
@@ -154,10 +159,7 @@ public class MatchFragment extends Fragment {
       }
     });
 
-    TextView matchMessage = (TextView) view.findViewById(R.id.message);
-    matchMessage.setText(templateData.get(3));
     setPage(templateData.get(0), (ImageView) view.findViewById(R.id.match_picture));
-    setPage(templateData.get(4), (ImageView) view.findViewById(R.id.profile_picture));
   }
 
   public void setPage(String userId, final ImageView imageView) {
@@ -262,5 +264,42 @@ public class MatchFragment extends Fragment {
     @Override
     protected void onPostExecute(Void result) {
     }
+  }
+
+  private void populateMessage(String messageId) {
+    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
+    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        // Map a Message object to an entry in our listview
+        Message message = snapshot.getValue(Message.class);
+        final MessageWithImage messageWithImage = new MessageWithImage(message);
+        TextView matchMessage = (TextView) view.findViewById(R.id.message);
+        matchMessage.setText(message.getMessage());
+
+        String pictureKey = "users/" + message.getUserId() + "/profilePictureUrl";
+        Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+        userFirebaseRef.child(pictureKey).addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            String url = (String) snapshot.getValue();
+            final ImageView imageView = (ImageView) view.findViewById(R.id.profile_picture);
+            new PictureLoaderTask(new BitmapRunnable() {
+              public void run() {
+                imageView.setImageBitmap(getBitmap());
+              }
+            }).execute(url);
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
   }
 }
