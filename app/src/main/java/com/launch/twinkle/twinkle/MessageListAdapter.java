@@ -3,9 +3,12 @@ package com.launch.twinkle.twinkle;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -14,6 +17,7 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.launch.twinkle.twinkle.models.Message;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,11 +34,8 @@ public class MessageListAdapter extends FirebaseListAdapter<String> {
   }
 
   @Override
-  protected void populateView(View view, String bool) {
-    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + bool);
-
-    //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    //StrictMode.setThreadPolicy(policy);
+  protected void populateView(View view, String messageId) {
+    Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
 
     final View finalView = view;
 
@@ -53,6 +54,31 @@ public class MessageListAdapter extends FirebaseListAdapter<String> {
           authorText.setTextColor(Color.BLUE);
         }*/
         ((TextView) finalView.findViewById(R.id.message)).setText(messageText);
+
+        // Proof of concept for binding to picture
+        String pictureKey = "users/" + userId + "/profilePictureUrl";
+        Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+        userFirebaseRef.child(pictureKey).addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String url = (String) snapshot.getValue();
+            try {
+              URL imageURL = new URL(url);
+
+              Bitmap image = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+              ((ImageView) finalView.findViewById(R.id.profile_picture)).setImageBitmap(image);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
       }
 
       @Override
