@@ -174,6 +174,40 @@ public class ProfileSetupFragment extends Fragment {
     return pictures;
   }
 
+  /*
+  public List<Bitmap> getBitMaps(List<String> urls) {
+    pictures = new ArrayList<Bitmap>();
+    try {
+      for (int i = 0; i < urls.size(); i++) {
+        String url = urls.get(i);
+        if (i < urls.size() - 1) {
+          new PictureLoaderTask(new BitmapRunnable() {
+            @Override
+            public void run() {
+              pictures.add(getBitmap());
+            }
+          }).execute(url);
+        } else {
+          new PictureLoaderTask(new BitmapRunnable() {
+            @Override
+            public void run() {
+              pictures.add(getBitmap());
+              progressBar.setVisibility(View.GONE);
+              gridView.setAdapter(new MyAdapter(getActivity()));
+            }
+          });
+        }
+        //URL imageURL = new URL(url);
+        //pictures.add(BitmapFactory.decodeStream(imageURL.openConnection().getInputStream()));
+      }
+    } catch (Exception e) {
+      Log.i(TAG, "Cannot get profile picture.");
+      e.printStackTrace();
+    }
+    return pictures;
+  }
+   */
+
   public static Bitmap getFacebookProfilePicture(String userID){
     try {
       URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");

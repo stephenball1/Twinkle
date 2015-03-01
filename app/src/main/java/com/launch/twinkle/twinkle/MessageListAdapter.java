@@ -44,11 +44,18 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithI
     if (messageWithImage != null) {
       Message message = messageWithImage.getMessage();
       TextView textView = (TextView) view.findViewById(R.id.message);
-      ImageView image = (ImageView) view.findViewById(R.id.profile_picture);
+      boolean senderIsSelf = false;
       if (message != null) {
         textView.setText(message.getMessage());
+        senderIsSelf = message.getUserId().equals(ApplicationState.getLoggedInUserId());
       }
 
+      ImageView image;
+      if (senderIsSelf) {
+        image = (ImageView) view.findViewById(R.id.self_profile_picture);
+      } else {
+        image = (ImageView) view.findViewById(R.id.profile_picture);
+      }
       Bitmap bitmap = messageWithImage.getBitmap();
       if (bitmap != null) {
         image.setImageBitmap(bitmap);
@@ -57,15 +64,16 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithI
       if (message != null) {
         LayoutParams inputParams = (RelativeLayout.LayoutParams) image.getLayoutParams();
         LayoutParams textParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-
+        float d = image.getContext().getResources().getDisplayMetrics().density;
+        int small = (int) (15 * d);
+        int medium = (int) (10 * d);
+        int large = (int) (35 * d);
         if (message.getUserId().equals(ApplicationState.getLoggedInUserId())) {
-          inputParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-          textParams.setMargins(25, 0, 100, 0);
-          textView.setPadding(100, 50, 25, 50);
+          textParams.setMargins(small, 0, large, 0);
+          textView.setPadding(small, medium, large, medium);
         } else {
-          inputParams.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-          textParams.setMargins(100, 0, 25, 0);
-          textView.setPadding(100, 50, 25, 50);
+          textParams.setMargins(large, 0, small, 0);
+          textView.setPadding(large, medium, small, medium);
         }
         image.setLayoutParams(inputParams);
         textView.setLayoutParams(textParams);
