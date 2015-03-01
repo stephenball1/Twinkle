@@ -7,14 +7,17 @@ import android.widget.ImageView;
 
 import java.net.URL;
 
-public class PictureLoaderTask extends AsyncTask<Object, Void, Bitmap> {
+public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
 
   private ImageView view;
+  private BitmapRunnable bitmapRunnable;
 
+  public PictureLoaderTask(BitmapRunnable bitmapRunnable) {
+    this.bitmapRunnable = bitmapRunnable;
+  }
   @Override
-  protected Bitmap doInBackground(Object... args) {
+  protected Bitmap doInBackground(String... args) {
     String url = (String)args[0];
-    view = (ImageView)args[1];
 
     try {
       URL imageURL = new URL(url);
@@ -27,7 +30,10 @@ public class PictureLoaderTask extends AsyncTask<Object, Void, Bitmap> {
 
   @Override
   protected void onPostExecute(Bitmap bitmap) {
-    view.setImageBitmap(bitmap);
+    if (bitmapRunnable != null) {
+      bitmapRunnable.setBitmap(bitmap);
+      bitmapRunnable.run();
+    }
   }
 
 }

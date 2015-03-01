@@ -202,6 +202,12 @@ public abstract class FirebaseListAdapter<T, U> extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  protected U getSecondaryValue(T modelLookup) {
+    int index = mModels.indexOf(modelLookup);
+    if (index >= 0) mSecondaryModels.get(index);
+    return null;
+  }
+
   protected void setSecondaryValue(T modelLookup, U value) {
     int index = mModels.indexOf(modelLookup);
     if (index >= 0) mSecondaryModels.add(index, value);
