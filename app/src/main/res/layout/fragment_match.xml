@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="180dp"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:id="@+id/name_block">
 
         <TextView
             android:id="@+id/match_name"
@@ -43,98 +44,49 @@
             android:textSize="18dp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="270dp">
+  <include layout="@layout/chat_message"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/name_block"/>
+  <Button
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="70dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="@color/primary"
+    android:text="12 more messages"
+    android:textAllCaps="false"
+    android:textSize="18dp" />
 
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:weightSum="2">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="80dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp">
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:background="#B8B8B8"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:text="No"
+      android:textAllCaps="false"
+      android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/match_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                android:background="#FFFFFF"
-                android:paddingLeft="15dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:text="Ian, she seems like a really nice girl. You definitely should at least go out for a cup of tea ..."
-                android:textColor="#000000"
-                android:textSize="18dp" />
-        </LinearLayout>
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:background="#E91E63"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:text="Yes"
+      android:textAllCaps="false"
+      android:textSize="20dp" />
+  </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingTop="15dp">
-
-            <com.launch.twinkle.twinkle.CircleImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:src="@drawable/profile_test" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="70dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="15dp">
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/primary"
-            android:text="12 more messages"
-            android:textAllCaps="false"
-            android:textSize="18dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:weightSum="2">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#B8B8B8"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="No"
-                android:textAllCaps="false"
-                android:textSize="20dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#E91E63"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Yes"
-                android:textAllCaps="false"
-                android:textSize="20dp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-</FrameLayout><!--
-
-        -->
+</RelativeLayout>

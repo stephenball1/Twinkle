@@ -45,13 +45,13 @@ public class MessageListAdapter extends FirebaseListAdapter<String> {
         Message message = snapshot.getValue(Message.class);
         String messageText = message.getMessage();
         String userId = message.getUserId();
-        TextView authorText = (TextView) finalView.findViewById(R.id.author);
+        /*TextView authorText = (TextView) finalView.findViewById(R.id.author);
         // If the message was sent by this user, color it differently
         if (userId != null && userId.equals(mUsername)) {
           authorText.setTextColor(Color.RED);
         } else {
           authorText.setTextColor(Color.BLUE);
-        }
+        }*/
         ((TextView) finalView.findViewById(R.id.message)).setText(messageText);
       }
 
