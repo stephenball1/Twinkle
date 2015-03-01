@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,6 +116,29 @@ public class MatchFragment extends Fragment {
     getActivity().invalidateOptionsMenu();
 
     setMatchingPage();
+
+    Button yesButton = (Button) view.findViewById(R.id.yes_button);
+    yesButton.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        Button yesButton = (Button) v.findViewById(R.id.yes_button);
+        yesButton.setText("Waiting...");
+      }
+    });
+
+    Button noButton = (Button) view.findViewById(R.id.no_button);
+    noButton.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        Fragment waitingFragment = new WaitingFragment();
+
+        Bundle bundle = new Bundle();
+        waitingFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, waitingFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+      }
+    });
     return view;
   }
 
