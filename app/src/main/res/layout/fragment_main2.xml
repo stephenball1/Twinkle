@@ -36,9 +36,9 @@
         facebook:confirm_logout="false"
         facebook:fetch_user_info="true"
         facebook:login_text="Sign Up with Facebook"
+        android:layout_marginBottom="51dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/temp_button_2"
-        android:layout_marginBottom="47dp" />
+        android:layout_centerHorizontal="true" />
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
