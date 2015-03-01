@@ -111,7 +111,7 @@ public class ProfileSetupFragment extends Fragment {
         // TODO HACK optimally this could transition with closing Pick Friends Activity
         Fragment matchFragment = new MatchFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(android.R.id.content, matchFragment);
+        transaction.replace(R.id.container, matchFragment);
 
         transaction.addToBackStack(null);
         transaction.commit();
