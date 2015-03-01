@@ -175,6 +175,7 @@ public class ProfileSetupFragment extends Fragment {
     new Request(session, "/me/albums", null, HttpMethod.GET, new Request.Callback() {
       public void onCompleted(Response response) {
         try {
+          System.out.println("response: " + response.toString());
           JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
           System.out.println("hi2");
           System.out.println(albumArr.toString());

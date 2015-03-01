@@ -41,7 +41,7 @@ public class MainFragment extends Fragment {
   private final List<String> permissions;
 
   public MainFragment() {
-    permissions = Arrays.asList("public_profile,user_birthday,email,user_friends,user_status");
+    permissions = Arrays.asList("public_profile,user_birthday,email,user_friends,user_photos,user_status");
   }
 
   @Override
@@ -59,10 +59,12 @@ public class MainFragment extends Fragment {
     authButton = (LoginButton) view.findViewById(R.id.authButton);
     authButton.setFragment(this);
     authButton.setReadPermissions(permissions);
+
       authButton.setUserInfoChangedCallback(new UserInfoChangedCallback() {
           @Override
           public void onUserInfoFetched(GraphUser user) {
-              if (user != null) {
+
+            if (user != null) {
                   username.setText("You are currently logged in as " + user.getName());
                   /*
                   // Create new fragment and transaction.
