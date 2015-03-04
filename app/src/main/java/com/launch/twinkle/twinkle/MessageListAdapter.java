@@ -51,10 +51,16 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithI
       }
 
       ImageView image;
+      ImageView selfProfileImage = (ImageView) view.findViewById(R.id.self_profile_picture);
+      ImageView profileImage = (ImageView) view.findViewById(R.id.profile_picture);
       if (senderIsSelf) {
-        image = (ImageView) view.findViewById(R.id.self_profile_picture);
+        selfProfileImage.setVisibility(View.VISIBLE);
+        profileImage.setVisibility(View.GONE);
+        image = selfProfileImage;
       } else {
-        image = (ImageView) view.findViewById(R.id.profile_picture);
+        selfProfileImage.setVisibility(View.GONE);
+        profileImage.setVisibility(View.VISIBLE);
+        image = profileImage;
       }
       Bitmap bitmap = messageWithImage.getBitmap();
       if (bitmap != null) {
