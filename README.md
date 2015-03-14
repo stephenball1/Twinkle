@@ -4,20 +4,9 @@ A social dating app created at the LAUNCH 2015 Hackathon.  Winner of the Firebas
 
 http://challengepost.com/software/circl-dating-app
 
-<table>
-  <tr>
-    <td><img src="/screenshots/circl_cover.jpg?raw=true" alt="Cover screen" /></td>
-    <td><img src="/screenshots/circl_circle.jpg?raw=true" alt="Circle of trust" /></td>
-    <td><img src="/screenshots/circl_match.jpg?raw=true" alt="Daily match" /></td>
-    <td><img src="/screenshots/circl_chat.jpg?raw=true" alt="Group chat" /></td>
-  </tr>
-  <tr>
-    <td>Cover screen</td>
-    <td>Circle of Trust</td>
-    <td>Daily match</td>
-    <td>Group chat</td>
-  </tr>
-</table>
+![Cover screen](/screenshots/circl_cover.jpg?raw=true "Cover screen") | ![Circle of trust](/screenshots/circl_circle.jpg?raw=true "Circle of trust") | ![Daily match](/screenshots/circl_match.jpg?raw=true "Daily match") | ![Group chat](/screenshots/circl_chat.jpg?raw=true "Group chat")
+:----------: | :-------------: | :---------: | :--------:
+Cover Screen | Circle of trust | Daily match | Group chat
 
 ## Installation
 Boot up Android Studio and run the app!
