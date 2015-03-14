@@ -4,7 +4,8 @@ A social dating app created at the LAUNCH 2015 Hackathon.  Winner of the Firebas
 
 http://challengepost.com/software/circl-dating-app
 
-![Cover screen](/screenshots/circl_cover.jpg?raw=true "Cover screen")
+<img src="/screenshots/circl_cover.jpg?raw=true" alt="Cover screen" />
+
 ![Circle screen](/screenshots/circl_circle.jpg?raw=true "Circle screen")|
 ![Match screen](/screenshots/circl_match.jpg?raw=true "Match screen")
 ![Chat screen](/screenshots/circl_chat.jpg?raw=true "Chat screen")
