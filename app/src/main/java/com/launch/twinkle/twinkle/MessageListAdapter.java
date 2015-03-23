@@ -20,8 +20,12 @@ import com.firebase.client.ValueEventListener;
 import com.launch.twinkle.twinkle.models.Message;
 import com.launch.twinkle.twinkle.models.User;
 
+import android.text.format.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithUser> {
@@ -36,6 +40,7 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithU
   }
 
   @Override
+  // TODO @sball: a lot of this code is duplicated in MatchFragment
   protected void populateView(View view, String messageId, MessageWithUser messageWithUser) {
     Firebase ref = new Firebase(Constants.FIREBASE_URL + Message.tableName + "/" + messageId);
 
@@ -45,12 +50,24 @@ public class MessageListAdapter extends FirebaseListAdapter<String, MessageWithU
     if (messageWithUser != null) {
       Message message = messageWithUser.getMessage();
       TextView textView = (TextView) view.findViewById(R.id.message);
+      TextView messageTime = (TextView) view.findViewById(R.id.message_time);
 
 
       boolean senderIsSelf = false;
       if (message != null) {
         textView.setText(message.getMessage());
         senderIsSelf = message.getUserId().equals(ApplicationState.getLoggedInUserId());
+        if (message.getTimestamp() > 0) {
+          messageTime.setVisibility(View.VISIBLE);
+          // Todo @sball: refactor to better share code between message list
+          // and profile message snippet
+          Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+          cal.setTimeInMillis(message.getTimestamp());
+          java.text.DateFormat dateFormat = DateFormat.getTimeFormat(view.getContext());
+          messageTime.setText(dateFormat.format(cal.getTime()));
+        } else {
+          messageTime.setVisibility(View.GONE);
+        }
       }
 
       User sender = messageWithUser.getUser();

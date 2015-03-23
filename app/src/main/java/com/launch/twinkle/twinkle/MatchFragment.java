@@ -7,9 +7,11 @@ import com.launch.twinkle.twinkle.models.User;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -153,26 +156,29 @@ public class MatchFragment extends Fragment {
       }
     });
 
-    setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture));
+    setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture), false);
   }
 
-  public void setPage(String userId, final ImageView imageView) {
+  public void setPage(String userId, final ImageView imageView, final boolean includeSender) {
 
     // Proof of concept for binding to picture
-    String pictureKey = "users/" + userId + "/profilePictureUrl";
+    String pictureKey = "users/" + userId;
     Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL);
     userFirebaseRef.child(pictureKey).
 
     addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
-        String url = (String) snapshot.getValue();
+        final User user = snapshot.getValue(User.class);
         try {
           new PictureLoaderTask(new BitmapRunnable() {
             public void run() {
               imageView.setImageBitmap(getBitmap());
+              if (includeSender) {
+                ((TextView) view.findViewById(R.id.message_sender)).setText(user.getFirstName());
+              }
             }
-          }).execute(url);
+          }).execute(user.getProfilePictureUrl());
 
         } catch (Exception e) {
           e.printStackTrace();
@@ -274,8 +280,24 @@ public class MatchFragment extends Fragment {
         final MessageWithImage messageWithImage = new MessageWithImage(message);
         TextView matchMessage = (TextView) view.findViewById(R.id.message);
         matchMessage.setText(message.getMessage());
+        TextView messageTime = (TextView) view.findViewById(R.id.message_time);
 
-        setPage(message.getUserId(), (ImageView) view.findViewById(R.id.profile_picture));
+        if (message.getTimestamp() > 0) {
+          messageTime.setVisibility(View.VISIBLE);
+          // Todo @sball: refactor to better share code between message list
+          // and profile message snippet
+          Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+          cal.setTimeInMillis(message.getTimestamp());
+          java.text.DateFormat dateFormat = DateFormat.getTimeFormat(view.getContext());
+          messageTime.setText(dateFormat.format(cal.getTime()));
+        } else {
+          messageTime.setVisibility(View.GONE);
+        }
+        boolean includeSender = !message.getUserId().equals(ApplicationState.getLoggedInUserId());
+        if (!includeSender) view.findViewById(R.id.message_sender).setVisibility(View.GONE);
+
+        setPage(message.getUserId(), (ImageView) view.findViewById(R.id.profile_picture),
+                includeSender);
       }
 
       @Override

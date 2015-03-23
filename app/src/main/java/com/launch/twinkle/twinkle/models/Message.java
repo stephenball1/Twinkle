@@ -5,6 +5,7 @@ public class Message extends AbstractModel {
   private String id;
   private String message;
   private String userId;
+  private long timestamp;
 
   // Required default constructor for Firebase object mapping
   private Message() {
@@ -14,6 +15,7 @@ public class Message extends AbstractModel {
     this.id = id;
     this.userId = userId;
     this.message = message;
+    this.timestamp = System.currentTimeMillis();
   }
 
   @Override
@@ -21,7 +23,15 @@ public class Message extends AbstractModel {
     return Message.tableName;
   }
 
-  public String getUserId() { return userId; }
+  public String getUserId() {
+    return userId;
+  }
 
-  public String getMessage() { return message; }
+  public String getMessage() {
+    return message;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
 }
