@@ -1,14 +1,5 @@
 package com.launch.twinkle.twinkle;
 
-import com.launch.twinkle.twinkle.models.User;
-import com.launch.twinkle.twinkle.models.Profile;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,7 +9,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,20 +19,18 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ProfileSetupFragment extends Fragment {
   private static final String TAG = ProfileSetupFragment.class.getSimpleName();
@@ -85,7 +73,7 @@ public class ProfileSetupFragment extends Fragment {
         }
       }
     });
-
+/*
     nextButton.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         int firstSelectedIndex = -1;
@@ -109,6 +97,17 @@ public class ProfileSetupFragment extends Fragment {
         getActivity().startActivity(pickFriends);
 
         // TODO HACK optimally this could transition with closing Pick Friends Activity
+        Fragment matchFragment = new MatchFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, matchFragment);
+
+        transaction.addToBackStack(null);
+        transaction.commit();
+      }
+    });
+*/
+    nextButton.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
         Fragment matchFragment = new MatchFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, matchFragment);
@@ -174,40 +173,6 @@ public class ProfileSetupFragment extends Fragment {
     return pictures;
   }
 
-  /*
-  public List<Bitmap> getBitMaps(List<String> urls) {
-    pictures = new ArrayList<Bitmap>();
-    try {
-      for (int i = 0; i < urls.size(); i++) {
-        String url = urls.get(i);
-        if (i < urls.size() - 1) {
-          new PictureLoaderTask(new BitmapRunnable() {
-            @Override
-            public void run() {
-              pictures.add(getBitmap());
-            }
-          }).execute(url);
-        } else {
-          new PictureLoaderTask(new BitmapRunnable() {
-            @Override
-            public void run() {
-              pictures.add(getBitmap());
-              progressBar.setVisibility(View.GONE);
-              gridView.setAdapter(new MyAdapter(getActivity()));
-            }
-          });
-        }
-        //URL imageURL = new URL(url);
-        //pictures.add(BitmapFactory.decodeStream(imageURL.openConnection().getInputStream()));
-      }
-    } catch (Exception e) {
-      Log.i(TAG, "Cannot get profile picture.");
-      e.printStackTrace();
-    }
-    return pictures;
-  }
-   */
-
   public static Bitmap getFacebookProfilePicture(String userID){
     try {
       URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
@@ -232,7 +197,7 @@ public class ProfileSetupFragment extends Fragment {
           System.out.println(albumArr.toString());
           List<String> urls = new ArrayList<String>();
 
-          if (albumArr.length() == 0) {
+          //if (albumArr.length() == 0) {
             urls.add("https://graph.facebook.com/" + ApplicationState.getLoggedInUserId() + "/picture?type=large");
             selectedPictures.put(0, true);
             pictures = new ArrayList<Bitmap>();
@@ -240,8 +205,10 @@ public class ProfileSetupFragment extends Fragment {
             pictureUrls = urls;
             progressBar.setVisibility(View.GONE);
             gridView.setAdapter(new MyAdapter(getActivity()));
-          }
-          for (int i = 0; i < albumArr.length(); i++) {
+          //}
+          /*
+          for (int i = 0; i < 1; i++) {
+          // for (int i = 0; i < albumArr.length(); i++) {
             JSONObject item = albumArr.getJSONObject(i);
             System.out.println("type:" + item.getString("type"));
             if (item.getString("type").equals("profile")) {
@@ -269,7 +236,7 @@ public class ProfileSetupFragment extends Fragment {
                 }
               }).executeAsync();
             }
-          }
+          } */
         } catch (Exception e) {
           e.printStackTrace();
         }

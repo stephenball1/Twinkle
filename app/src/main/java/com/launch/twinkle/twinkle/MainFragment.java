@@ -1,20 +1,10 @@
 package com.launch.twinkle.twinkle;
 
-import com.facebook.FacebookException;
-import com.facebook.widget.FriendPickerFragment;
-import com.facebook.widget.PickerFragment;
-import com.launch.twinkle.twinkle.models.User;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import android.graphics.Color;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +14,18 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.FriendPickerFragment;
-import com.facebook.widget.PickerFragment;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.launch.twinkle.twinkle.models.Users;
+import com.launch.twinkle.twinkle.models.FirebaseRef;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class MainFragment extends Fragment {
   private static final String TAG = MainFragment.class.getSimpleName();
@@ -194,23 +188,24 @@ public class MainFragment extends Fragment {
       firebaseRef.authWithOAuthToken("facebook", session.getAccessToken(), new Firebase.AuthResultHandler() {
         @Override
         public void onAuthenticated(AuthData authData) {
-          // The Facebook user is now authenticated with Firebase
+          // The Facebook user is now authenticated with Firebase.
           Map<String, Object> providerData = authData.getProviderData();
           Map<String, Object> facebookProfile = (Map<String, Object>) providerData.get("cachedUserProfile");
-          User user = new User((String) providerData.get("id"), facebookProfile);
-          user.updateInfo();
+          //User user = new User((String) providerData.get("id"), facebookProfile);
+          //user.updateInfo();
+          Users user = new Users(facebookProfile);
+          FirebaseRef firebaseRefWrapper = new FirebaseRef();
+          firebaseRefWrapper.storeUser(user);
         }
 
         @Override
         public void onAuthenticationError(FirebaseError firebaseError) {
-          // there was an error
+          // there was an error.
         }
       });
 
-      Log.i(TAG, "Logged in...");
     } else if (state.isClosed()) {
       firebaseRef.unauth();
-      Log.i(TAG, "Logged out...");
     }
   }
 
