@@ -1,10 +1,12 @@
 package com.launch.twinkle.twinkle;
 
-import com.firebase.client.Firebase;
-
 public class ApplicationState {
+  private static String loggedInUserId;
+
   public static String getLoggedInUserId() {
-    Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL);
-    return (String) firebaseRef.getAuth().getProviderData().get("id");
+    return loggedInUserId;
+  }
+  public static void setLoggedInUserId(String id) {
+    loggedInUserId = id;
   }
 }

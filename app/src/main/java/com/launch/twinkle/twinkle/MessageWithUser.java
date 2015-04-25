@@ -5,9 +5,6 @@ import android.graphics.Bitmap;
 import com.launch.twinkle.twinkle.models.Message;
 import com.launch.twinkle.twinkle.models.User;
 
-/**
- * Created by sball on 3/22/15.
- */
 public class MessageWithUser {
   private Message message;
   private User user;

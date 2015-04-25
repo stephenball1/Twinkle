@@ -20,8 +20,8 @@ import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.launch.twinkle.twinkle.models.Users;
 import com.launch.twinkle.twinkle.models.FirebaseRef;
+import com.launch.twinkle.twinkle.models.Users;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,14 +65,15 @@ public class MainFragment extends Fragment {
                 getActivity().getActionBar().show();
                 //username.setText("You are currently logged in as " + user.getName());
                 // Create new fragment and transaction.
-
+/*
                 ProfileSetupFragment profileFragment = new ProfileSetupFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, profileFragment);
                 transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
+*/
 
-              // Commit the transaction
-              transaction.commit();
 
               } else {
                   username.setText("");
@@ -196,6 +197,15 @@ public class MainFragment extends Fragment {
           Users user = new Users(facebookProfile);
           FirebaseRef firebaseRefWrapper = new FirebaseRef();
           firebaseRefWrapper.storeUser(user);
+
+          ApplicationState.setLoggedInUserId(firebaseRefWrapper.getId());
+          // TODO(judymou): Add a blocking task to load bitmaps into the cache.
+
+          Fragment matchFragment = new MatchFragment();
+          FragmentTransaction transaction = getFragmentManager().beginTransaction();
+          transaction.replace(R.id.container, matchFragment);
+          transaction.addToBackStack(null);
+          transaction.commit();
         }
 
         @Override

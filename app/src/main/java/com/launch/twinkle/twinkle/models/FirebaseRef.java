@@ -3,9 +3,6 @@ package com.launch.twinkle.twinkle.models;
 import com.firebase.client.Firebase;
 import com.launch.twinkle.twinkle.Constants;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class FirebaseRef {
 
   private Firebase firebaseRef;
@@ -17,8 +14,10 @@ public class FirebaseRef {
   }
 
   public void storeUser(Users user) {
-    Map<String, Users> users = new HashMap<String, Users>();
-    users.put(id, user);
-    firebaseRef.child("user").setValue(users);
+    firebaseRef.child("user/" + id).setValue(user);
+  }
+
+  public String getId() {
+    return id;
   }
 }

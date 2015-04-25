@@ -29,7 +29,6 @@ public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
       URL imageURL = new URL(url);
       Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
       BitmapCache.addBitmapToMemoryCache(url, bitmap);
-
       return bitmap;
     } catch (Exception e) {
       e.printStackTrace();
@@ -44,5 +43,4 @@ public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
       bitmapRunnable.run();
     }
   }
-
 }

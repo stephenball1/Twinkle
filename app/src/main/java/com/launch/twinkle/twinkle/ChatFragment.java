@@ -1,14 +1,8 @@
 package com.launch.twinkle.twinkle;
 
-import com.launch.twinkle.twinkle.models.Message;
-import com.launch.twinkle.twinkle.models.MessageList;
-import com.launch.twinkle.twinkle.models.User;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.database.DataSetObserver;
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +15,9 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.launch.twinkle.twinkle.models.Message;
+import com.launch.twinkle.twinkle.models.MessageList;
+import com.launch.twinkle.twinkle.models.User;
 
 /**
  * Created by sball on 2/27/15.
@@ -87,12 +84,13 @@ public class ChatFragment extends ListFragment {
     view.findViewById(R.id.match_snippet).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        /*
         Fragment matchFragment = new MatchFragment(chatId);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, matchFragment);
 
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit(); */
       }
     });
 

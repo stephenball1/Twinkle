@@ -10,16 +10,26 @@ public class Users {
   private String birthday;
   private int age;
   private String gender;
+  private String profileUrl;
 
   public Users() {
   }
 
   public Users(Map<String, Object> facebookProfile) {
+
     firstName = (String) facebookProfile.get("first_name");
     lastName = (String) facebookProfile.get("last_name");
     birthday = (String) facebookProfile.get("birthday");
     age = calculateAge();
     gender = (String) facebookProfile.get("gender");
+    profileUrl = "https://graph.facebook.com/" + facebookProfile.get("id") + "/picture?type=large";
+/*
+    firstName = "Tuling";
+    lastName = "Ma";
+    birthday = "10/01/1990";
+    age = calculateAge();
+    gender = "male";
+*/
   }
 
   public String getBirthday() {
@@ -40,6 +50,10 @@ public class Users {
 
   public String getGender() {
     return gender;
+  }
+
+  public String getProfileUrl() {
+    return profileUrl;
   }
 
   private int calculateAge() {

@@ -1,25 +1,13 @@
 package com.launch.twinkle.twinkle;
 
-import com.launch.twinkle.twinkle.models.*;
-
-import android.app.Activity;
-import android.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
-import com.facebook.widget.LoginButton;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends FragmentActivity {
   private MainFragment mainFragment;
@@ -69,7 +57,7 @@ public class MainActivity extends FragmentActivity {
       return true;
     } else if (id == R.id.action_chat) {
       getActionBar().setTitle("Circles");
-      Fragment chatListFragment = ChatListFragment.newInstance();
+      Fragment chatListFragment = new ChatListFragment2();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.container, chatListFragment);
 

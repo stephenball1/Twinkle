@@ -1,146 +1,94 @@
 package com.launch.twinkle.twinkle;
 
-import com.launch.twinkle.twinkle.models.Message;
-import com.launch.twinkle.twinkle.models.MessageList;
-import com.launch.twinkle.twinkle.models.User;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.launch.twinkle.twinkle.models.Message;
+import com.launch.twinkle.twinkle.models.User;
+import com.launch.twinkle.twinkle.models.Users;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.Calendar;
+import java.util.Locale;
 
+// Match fragment runs assume there is a job that update the matchId for each user everyday.
 public class MatchFragment extends Fragment {
   private static final String TAG = MatchFragment.class.getSimpleName();
   // match user id, Name, age, comment, commenter user id, number of messages.
   private View view;
-  private String matchId;
-  private boolean hideFooter = false;
+  private Long matchedUserId;
+  private Firebase firebase;
 
   public MatchFragment() {
-  }
-
-  public MatchFragment(String matchId) {
-    this.matchId = matchId;
-    hideFooter = true;
+    firebase = new Firebase(Constants.FIREBASE_URL);
   }
 
   @Override
   public void onStart() {
     super.onStart();
 
-    String idKey = "users/" + ApplicationState.getLoggedInUserId() + "/matchId";
-    Firebase idFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(idKey);
-    idFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    String matchedUserIdKey = "matches/" + ApplicationState.getLoggedInUserId() + "/matchedUserId";
+    firebase.child(matchedUserIdKey).addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
-        if (matchId == null) {
-          matchId = (String) snapshot.getValue();
-        }
-
-        String matchKey = "matches/" + matchId + "/matchedUserId";
-        Firebase matchFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(matchKey);
-        matchFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        matchedUserId = (Long) snapshot.getValue();
+        System.out.println("matchedUserId: " + matchedUserId);
+        String userKey = "user/" + matchedUserId;
+        firebase.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
           @Override
           public void onDataChange(DataSnapshot snapshot) {
-            String matchedUserId = (String) snapshot.getValue();
-            String userKey = "users/" + matchedUserId;
-            Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(userKey);
-            userFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-              @Override
-              public void onDataChange(DataSnapshot snapshot) {
-                User matchedUser = snapshot.getValue(User.class);
-                setMatchingPage(matchedUser);
-              }
-
-              @Override
-              public void onCancelled(FirebaseError firebaseError) {
-              }
-            });
+            Users matchedUser = snapshot.getValue(Users.class);
+            setMatchingPage(matchedUser);
           }
-
           @Override
           public void onCancelled(FirebaseError firebaseError) {
           }
         });
       }
-
       @Override
       public void onCancelled(FirebaseError firebaseError) {
       }
     });
   }
 
-  public void setMatchingPage(User user) {
+  public void setMatchingPage(Users user) {
     TextView matchName = (TextView) view.findViewById(R.id.match_name);
-    matchName.setText(user.getDisplayName());
+    matchName.setText(user.getFirstName());
 
     TextView matchAge = (TextView) view.findViewById(R.id.match_age);
     matchAge.setText(user.getAge() + " yrs old");
-
-    // Get first message
-    //
-    // Get message count
-    String key = "messageLists/" + matchId;
-    Firebase userFirebaseRef = new Firebase(Constants.FIREBASE_URL).child(key);
-    userFirebaseRef.addValueEventListener(new ValueEventListener() {
+/*
+    String key = "messageList/" + matchedUserId;
+    firebase.child(key).addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot snapshot) {
+        TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
+
+        if (snapshot == null) {
+          matchMoreMessages.setText("No messages");
+          return;
+        }
         MessageList list = snapshot.getValue(MessageList.class);
 
         if (list == null) {
           Message message = new Message("", ApplicationState.getLoggedInUserId(), "What do you guys think?");
           message.create();
-          list = new MessageList(matchId);
+          list = new MessageList(matchedUserId);
           list.pushToChildList("messageIds", message.getId());
         } else {
-          TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
           LinkedHashMap<String, String> messageIds = list.getMessageIds();
           matchMoreMessages.setText(messageIds.size() + " more messages");
 
@@ -155,8 +103,8 @@ public class MatchFragment extends Fragment {
       public void onCancelled(FirebaseError firebaseError) {
       }
     });
-
-    setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture), false);
+*/
+    //setPage(user.getId(), (ImageView) view.findViewById(R.id.match_picture), false);
   }
 
   public void setPage(String userId, final ImageView imageView, final boolean includeSender) {
@@ -203,12 +151,7 @@ public class MatchFragment extends Fragment {
 
     getActivity().invalidateOptionsMenu();
 
-    if (hideFooter) {
-      view.findViewById(R.id.messageListFooter).setVisibility(View.GONE);
-      getActivity().getActionBar().setTitle("Profile");
-    } else {
-      getActivity().getActionBar().setTitle("Today's Match");
-    }
+    getActivity().getActionBar().setTitle("Today's Match");
 
     Button yesButton = (Button) view.findViewById(R.id.yes_button);
     yesButton.setOnClickListener(new View.OnClickListener() {
@@ -307,12 +250,13 @@ public class MatchFragment extends Fragment {
   }
 
   private void initTempButton(View view) {
+    /*
     Button clickButton = (Button) view.findViewById(R.id.match_more_messages);
     clickButton.setOnClickListener( new View.OnClickListener() {
 
       @Override
       public void onClick(View v) {
-        Fragment chatFragment = ChatFragment.newInstance(matchId);
+        Fragment chatFragment = ChatFragment.newInstance(matchedUserId);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
@@ -323,6 +267,7 @@ public class MatchFragment extends Fragment {
         transaction.commit();
       }
     });
+    */
   }
 
 }
