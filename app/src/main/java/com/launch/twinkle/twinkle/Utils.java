@@ -26,4 +26,8 @@ public class Utils {
       return map.get(a).compareTo(map.get(b));
     }
   }
+
+  public static String getProfileUrl(String id) {
+    return "https://graph.facebook.com/" + id + "/picture?type=large";
+  }
 }

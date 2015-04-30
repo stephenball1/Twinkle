@@ -1,5 +1,7 @@
 package com.launch.twinkle.twinkle.models;
 
+import com.launch.twinkle.twinkle.Utils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class Users {
     birthday = (String) facebookProfile.get("birthday");
     age = calculateAge();
     gender = (String) facebookProfile.get("gender");
-    profileUrl = "https://graph.facebook.com/" + facebookProfile.get("id") + "/picture?type=large";
+    profileUrl = Utils.getProfileUrl((String) facebookProfile.get("id"));
 /*
     firstName = "Tuling";
     lastName = "Ma";

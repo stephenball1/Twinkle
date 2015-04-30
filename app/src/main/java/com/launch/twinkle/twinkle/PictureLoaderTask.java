@@ -22,6 +22,7 @@ public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
     String url = (String)args[0];
     Bitmap cachedBitmap = BitmapCache.getBitmapFromMemCache(url);
     if (cachedBitmap != null) {
+      System.out.println("Got from cache");
       return cachedBitmap;
     }
 
