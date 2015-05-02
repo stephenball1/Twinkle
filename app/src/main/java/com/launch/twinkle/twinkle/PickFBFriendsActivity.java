@@ -1,10 +1,8 @@
 package com.launch.twinkle.twinkle;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import com.facebook.FacebookException;
 import com.facebook.model.GraphUser;
@@ -50,7 +48,7 @@ public class PickFBFriendsActivity extends FragmentActivity {
     friendPickerFragment.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {
       @Override
       public void onDoneButtonClicked(PickerFragment<?> fragment) {
-        List<GraphUser> selectedUsers = ((FriendPickerFragment)fragment).getSelection();
+        List<GraphUser> selectedUsers = ((FriendPickerFragment) fragment).getSelection();
         for (GraphUser selectedUser : selectedUsers) {
           // TODO(holman): store circle of trust user id.
           System.out.println("selectedUser: " + selectedUser.getId());

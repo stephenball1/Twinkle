@@ -46,11 +46,13 @@ public class MatchFragment extends Fragment {
             Users matchedUser = snapshot.getValue(Users.class);
             setMatchingPage(matchedUser);
           }
+
           @Override
           public void onCancelled(FirebaseError firebaseError) {
           }
         });
       }
+
       @Override
       public void onCancelled(FirebaseError firebaseError) {
       }

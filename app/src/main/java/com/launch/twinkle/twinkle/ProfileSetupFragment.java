@@ -52,7 +52,7 @@ public class ProfileSetupFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-               Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_profile_setup, container, false);
     gridView = (GridView) view.findViewById(R.id.gridview);
     progressBar = (ProgressBar) view.findViewById(R.id.loading_panel);
@@ -63,7 +63,7 @@ public class ProfileSetupFragment extends Fragment {
 
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       public void onItemClick(AdapterView<?> parent, View v,
-                  int position, long id) {
+                              int position, long id) {
         selectedPictures.put(position, !selectedPictures.get(position));
         ImageView checkMark = (ImageView) v.findViewById(R.id.selected);
         if (selectedPictures.get(position)) {
@@ -173,7 +173,7 @@ public class ProfileSetupFragment extends Fragment {
     return pictures;
   }
 
-  public static Bitmap getFacebookProfilePicture(String userID){
+  public static Bitmap getFacebookProfilePicture(String userID) {
     try {
       URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
       Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
@@ -198,13 +198,13 @@ public class ProfileSetupFragment extends Fragment {
           List<String> urls = new ArrayList<String>();
 
           //if (albumArr.length() == 0) {
-            urls.add("https://graph.facebook.com/" + ApplicationState.getLoggedInUserId() + "/picture?type=large");
-            selectedPictures.put(0, true);
-            pictures = new ArrayList<Bitmap>();
-            pictures.add(getFacebookProfilePicture(ApplicationState.getLoggedInUserId()));
-            pictureUrls = urls;
-            progressBar.setVisibility(View.GONE);
-            gridView.setAdapter(new MyAdapter(getActivity()));
+          urls.add("https://graph.facebook.com/" + ApplicationState.getLoggedInUserId() + "/picture?type=large");
+          selectedPictures.put(0, true);
+          pictures = new ArrayList<Bitmap>();
+          pictures.add(getFacebookProfilePicture(ApplicationState.getLoggedInUserId()));
+          pictureUrls = urls;
+          progressBar.setVisibility(View.GONE);
+          gridView.setAdapter(new MyAdapter(getActivity()));
           //}
           /*
           for (int i = 0; i < 1; i++) {

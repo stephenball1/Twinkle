@@ -90,24 +90,24 @@ public class ChatListFragment2 extends ListFragment {
     });
     final View finalView = view;
 
-        firebaseRef.child("user/" + topicUser).addListenerForSingleValueEvent(new ValueEventListener() {
-          @Override
-          public void onDataChange(DataSnapshot snapshot) {
-            Users topicUser = snapshot.getValue(Users.class);
-            ((TextView) finalView.findViewById(R.id.match_name)).setText(topicUser.getFirstName());
-            ((TextView) finalView.findViewById(R.id.match_age)).setText(topicUser.getAge() + " yrs old");
-            new PictureLoaderTask(new BitmapRunnable() {
-              public void run() {
-                ImageView image = (ImageView) finalView.findViewById(R.id.snippet_profile_picture);
-                image.setImageBitmap(getBitmap());
-              }
-            }).execute(topicUser.getProfileUrl());
+    firebaseRef.child("user/" + topicUser).addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        Users topicUser = snapshot.getValue(Users.class);
+        ((TextView) finalView.findViewById(R.id.match_name)).setText(topicUser.getFirstName());
+        ((TextView) finalView.findViewById(R.id.match_age)).setText(topicUser.getAge() + " yrs old");
+        new PictureLoaderTask(new BitmapRunnable() {
+          public void run() {
+            ImageView image = (ImageView) finalView.findViewById(R.id.snippet_profile_picture);
+            image.setImageBitmap(getBitmap());
           }
+        }).execute(topicUser.getProfileUrl());
+      }
 
-          @Override
-          public void onCancelled(FirebaseError firebaseError) {
-          }
-        });
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
 
 
     firebaseRef.child("user/" + mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -116,6 +116,7 @@ public class ChatListFragment2 extends ListFragment {
         Users user = snapshot.getValue(Users.class);
         getActivity().getActionBar().setTitle(user.getFirstName());
       }
+
       @Override
       public void onCancelled(FirebaseError firebaseError) {
       }

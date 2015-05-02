@@ -8,7 +8,7 @@ import java.util.TreeMap;
 public class Utils {
 
   public static TreeMap<String, String> sortByValue(HashMap<String, String> map) {
-    ValueComparator vc =  new ValueComparator(map);
+    ValueComparator vc = new ValueComparator(map);
     TreeMap<String, String> sortedMap = new TreeMap<String, String>(vc);
     sortedMap.putAll(map);
     return sortedMap;

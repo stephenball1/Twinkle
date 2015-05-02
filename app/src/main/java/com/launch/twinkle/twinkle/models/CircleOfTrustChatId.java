@@ -5,6 +5,7 @@ package com.launch.twinkle.twinkle.models;
  */
 public class CircleOfTrustChatId {
   private String key;
+
   // Required default constructor for Firebase object mapping
   @SuppressWarnings("unused")
   private CircleOfTrustChatId() {

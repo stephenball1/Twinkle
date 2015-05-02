@@ -22,13 +22,13 @@ public class MainActivity extends FragmentActivity {
       // Add the fragment on initial activity setup
       mainFragment = new MainFragment();
       getSupportFragmentManager()
-              .beginTransaction()
-              .add(R.id.container, mainFragment)
-              .commit();
+          .beginTransaction()
+          .add(R.id.container, mainFragment)
+          .commit();
     } else {
       // Or set the fragment from restored state info
       mainFragment = (MainFragment) getSupportFragmentManager()
-              .findFragmentById(R.id.container);
+          .findFragmentById(R.id.container);
     }
   }
 

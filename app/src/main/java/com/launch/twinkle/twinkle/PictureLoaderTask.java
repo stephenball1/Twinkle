@@ -19,7 +19,7 @@ public class PictureLoaderTask extends AsyncTask<String, Void, Bitmap> {
 
   @Override
   protected Bitmap doInBackground(String... args) {
-    String url = (String)args[0];
+    String url = (String) args[0];
     Bitmap cachedBitmap = BitmapCache.getBitmapFromMemCache(url);
     if (cachedBitmap != null) {
       System.out.println("Got from cache");

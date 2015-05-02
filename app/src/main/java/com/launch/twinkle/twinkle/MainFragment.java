@@ -56,14 +56,14 @@ public class MainFragment extends Fragment {
     authButton.setFragment(this);
     authButton.setReadPermissions(permissions);
 
-      authButton.setUserInfoChangedCallback(new UserInfoChangedCallback() {
-          @Override
-          public void onUserInfoFetched(GraphUser user) {
+    authButton.setUserInfoChangedCallback(new UserInfoChangedCallback() {
+      @Override
+      public void onUserInfoFetched(GraphUser user) {
 
-            if (user != null) {
-                getActivity().getActionBar().show();
-                //username.setText("You are currently logged in as " + user.getName());
-                // Create new fragment and transaction.
+        if (user != null) {
+          getActivity().getActionBar().show();
+          //username.setText("You are currently logged in as " + user.getName());
+          // Create new fragment and transaction.
 /*
                 ProfileSetupFragment profileFragment = new ProfileSetupFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -74,13 +74,13 @@ public class MainFragment extends Fragment {
 */
 
 
-              } else {
-                  username.setText("");
-              }
-          }
-      });
+        } else {
+          username.setText("");
+        }
+      }
+    });
 
-      username = (TextView) view.findViewById(R.id.username);
+    username = (TextView) view.findViewById(R.id.username);
 
     getActivity().getActionBar().hide();
     return view;
@@ -95,7 +95,7 @@ public class MainFragment extends Fragment {
     // may not be triggered. Trigger it if it's open/closed.
     Session session = Session.getActiveSession();
     if (session != null &&
-            (session.isOpened() || session.isClosed()) ) {
+        (session.isOpened() || session.isClosed())) {
       onSessionStateChange(session, session.getState(), null);
     }
 
