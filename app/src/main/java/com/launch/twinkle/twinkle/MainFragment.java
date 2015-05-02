@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.Session;
@@ -83,9 +82,6 @@ public class MainFragment extends Fragment {
 
       username = (TextView) view.findViewById(R.id.username);
 
-    initProfileSetupButton(view);
-    pickFriendsButton(view);
-
     getActivity().getActionBar().hide();
     return view;
   }
@@ -128,37 +124,6 @@ public class MainFragment extends Fragment {
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     uiHelper.onSaveInstanceState(outState);
-  }
-
-  private void pickFriendsButton(View view) {
-      Button clickButton = (Button) view.findViewById(R.id.temp_button_3);
-      clickButton.setOnClickListener( new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            Intent pickFriends= new Intent(getActivity(),PickFBFriendsActivity.class);
-            getActivity().startActivity(pickFriends);
-          }
-      });
-
-  }
-
-  private void initProfileSetupButton(View view) {
-    Button clickButton = (Button) view.findViewById(R.id.temp_button_2);
-    clickButton.setOnClickListener( new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ProfileSetupFragment chatFragment = new ProfileSetupFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, chatFragment);
-        transaction.addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
-      }
-    });
-
   }
 
   private void onSessionStateChange(Session session, SessionState state,
