@@ -24,6 +24,7 @@ import com.launch.twinkle.twinkle.models.Users;
 public class ChatListFragment2 extends ListFragment {
   private String mUsername;
   private String chatRoomId;
+  private String topicUser;
   private Firebase firebaseRefMessage;
   private Firebase firebaseRef;
   private ChatListAdapter2 mListAdapter;
@@ -34,6 +35,7 @@ public class ChatListFragment2 extends ListFragment {
     super.onCreate(savedInstanceState);
     mUsername = ApplicationState.getLoggedInUserId();
     chatRoomId = ApplicationState.getChatRoomId();
+    topicUser = ApplicationState.getTopicUser();
     firebaseRef = new Firebase(Constants.FIREBASE_URL);
     firebaseRefMessage = new Firebase(Constants.FIREBASE_URL).child("chat/" + chatRoomId + "/" + "messages");
   }
@@ -87,11 +89,8 @@ public class ChatListFragment2 extends ListFragment {
       }
     });
     final View finalView = view;
-    firebaseRef.child("chat/" + chatRoomId + "/topicuser").addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot snapshot) {
-        String topicUserId = (String) snapshot.getValue();
-        firebaseRef.child("user/" + topicUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        firebaseRef.child("user/" + topicUser).addListenerForSingleValueEvent(new ValueEventListener() {
           @Override
           public void onDataChange(DataSnapshot snapshot) {
             Users topicUser = snapshot.getValue(Users.class);
@@ -109,12 +108,7 @@ public class ChatListFragment2 extends ListFragment {
           public void onCancelled(FirebaseError firebaseError) {
           }
         });
-      }
 
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-      }
-    });
 
     firebaseRef.child("user/" + mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
       @Override

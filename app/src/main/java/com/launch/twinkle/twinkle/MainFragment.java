@@ -83,7 +83,6 @@ public class MainFragment extends Fragment {
 
       username = (TextView) view.findViewById(R.id.username);
 
-    initTempButton(view);
     initProfileSetupButton(view);
     pickFriendsButton(view);
 
@@ -129,25 +128,6 @@ public class MainFragment extends Fragment {
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     uiHelper.onSaveInstanceState(outState);
-  }
-
-  private void initTempButton(View view) {
-    Button clickButton = (Button) view.findViewById(R.id.temp_button);
-    clickButton.setOnClickListener( new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-        ChatFragment chatFragment = ChatFragment.newInstance("test");
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, chatFragment);
-        transaction.addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
-      }
-    });
   }
 
   private void pickFriendsButton(View view) {
