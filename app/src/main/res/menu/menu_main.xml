@@ -5,6 +5,10 @@
         android:icon="@drawable/heart"
         android:title="Past Matches"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/circle_of_trust"
+          android:icon="@drawable/chat"
+          android:title="Circle of Trust"
+          android:showAsAction="ifRoom" />
     <item android:id="@+id/action_chat"
         android:icon="@drawable/chat"
         android:title="Circle of Trust"
