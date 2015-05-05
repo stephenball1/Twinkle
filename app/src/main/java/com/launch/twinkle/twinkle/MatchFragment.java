@@ -1,6 +1,7 @@
 package com.launch.twinkle.twinkle;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -22,8 +24,8 @@ public class MatchFragment extends Fragment {
   private static final String TAG = MatchFragment.class.getSimpleName();
   // match user id, Name, age, comment, commenter user id, number of messages.
   private View view;
-  private Long matchedUserId;
   private Firebase firebase;
+  private ChatListAdapter2 mListAdapter;
 
   public MatchFragment() {
     firebase = new Firebase(Constants.FIREBASE_URL);
@@ -32,79 +34,6 @@ public class MatchFragment extends Fragment {
   @Override
   public void onStart() {
     super.onStart();
-
-    String matchedUserIdKey = "matches/" + ApplicationState.getLoggedInUserId() + "/matchedUserId";
-    firebase.child(matchedUserIdKey).addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot snapshot) {
-        matchedUserId = (Long) snapshot.getValue();
-        System.out.println("matchedUserId: " + matchedUserId);
-        String userKey = "user/" + matchedUserId;
-        firebase.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
-          @Override
-          public void onDataChange(DataSnapshot snapshot) {
-            Users matchedUser = snapshot.getValue(Users.class);
-            setMatchingPage(matchedUser);
-          }
-
-          @Override
-          public void onCancelled(FirebaseError firebaseError) {
-          }
-        });
-      }
-
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-      }
-    });
-  }
-
-  public void setMatchingPage(Users user) {
-    TextView matchName = (TextView) view.findViewById(R.id.match_name);
-    matchName.setText(user.getFirstName());
-
-    TextView matchAge = (TextView) view.findViewById(R.id.match_age);
-    matchAge.setText(user.getAge() + " yrs old");
-/*
-    String key = "messageList/" + matchedUserId;
-    firebase.child(key).addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot snapshot) {
-        TextView matchMoreMessages = (TextView) view.findViewById(R.id.match_more_messages);
-
-        if (snapshot == null) {
-          matchMoreMessages.setText("No messages");
-          return;
-        }
-        MessageList list = snapshot.getValue(MessageList.class);
-
-        if (list == null) {
-          Message message = new Message("", ApplicationState.getLoggedInUserId(), "What do you guys think?");
-          message.create();
-          list = new MessageList(matchedUserId);
-          list.pushToChildList("messageIds", message.getId());
-        } else {
-          LinkedHashMap<String, String> messageIds = list.getMessageIds();
-          matchMoreMessages.setText(messageIds.size() + " more messages");
-
-          TreeMap<String, String> sorted = Utils.sortByValue(messageIds);
-          Object[] texts = sorted.values().toArray();
-          String text = (String) texts[messageIds.size() - 1];
-          populateMessage(text);
-        }
-      }
-
-      @Override
-      public void onCancelled(FirebaseError firebaseError) {
-      }
-    });
-*/
-    final ImageView imageView = (ImageView) view.findViewById(R.id.match_picture);
-    new PictureLoaderTask(new BitmapRunnable() {
-      public void run() {
-        imageView.setImageBitmap(getBitmap());
-      }
-    }).execute(Utils.getProfileUrl(ApplicationState.getLoggedInUserId()));
   }
 
   @Override
@@ -116,8 +45,6 @@ public class MatchFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_match, container, false);
-
-    getActivity().invalidateOptionsMenu();
 
     getActivity().getActionBar().setTitle("Today's Match");
 
@@ -132,7 +59,6 @@ public class MatchFragment extends Fragment {
     Button noButton = (Button) view.findViewById(R.id.no_button);
     noButton.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        System.out.println("here!");
         Fragment waitingFragment = new WaitingFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(android.R.id.content, waitingFragment);
@@ -140,7 +66,29 @@ public class MatchFragment extends Fragment {
         transaction.commit();
       }
     });
-    initMatchMoreMessages(view);
+
+    String matchedUserIdKey = "matches/" + ApplicationState.getLoggedInUserId() + "/matchedUserId";
+    firebase.child(matchedUserIdKey).addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        final String matchedUserId = (String) snapshot.getValue();
+        firebase.child("user/" + matchedUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot snapshot) {
+            Users matchedUser = snapshot.getValue(Users.class);
+            setMatchingPage(matchedUser, matchedUserId);
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+      }
+    });
     return view;
   }
 
@@ -162,6 +110,7 @@ public class MatchFragment extends Fragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
+    mListAdapter.cleanup();
   }
 
   @Override
@@ -169,16 +118,60 @@ public class MatchFragment extends Fragment {
     super.onSaveInstanceState(outState);
   }
 
-  private void initMatchMoreMessages(View view) {
-    /*
-    Button clickButton = (Button) view.findViewById(R.id.match_more_messages);
-    clickButton.setOnClickListener( new View.OnClickListener() {
+  public void setMatchingPage(Users user, final String matchedUserId) {
+    TextView matchName = (TextView) view.findViewById(R.id.match_name);
+    matchName.setText(user.getFirstName());
+
+    TextView matchAge = (TextView) view.findViewById(R.id.match_age);
+    matchAge.setText(user.getAge() + " yrs old");
+
+    firebase.child("circleOfTrustChat/" + ApplicationState.getLoggedInUserId()
+        + "-" + matchedUserId + "/chatRoomId").addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot snapshot) {
+        final String chatRoomId = (String) snapshot.getValue();
+        final ListView listView = (ListView) view.findViewById(R.id.chat_message);
+        mListAdapter = new ChatListAdapter2(
+            firebase.child("chat/" + chatRoomId + "/messages").limitToLast(1),
+            getActivity(),
+            R.layout.chat_message,
+            ApplicationState.getLoggedInUserId());
+        listView.setAdapter(mListAdapter);
+        mListAdapter.registerDataSetObserver(new DataSetObserver() {
+          @Override
+          public void onChanged() {
+            super.onChanged();
+            System.out.println("mListAdapter.getCount()" + mListAdapter.getCount());
+            listView.setSelection(mListAdapter.getCount() - 1);
+          }
+        });
+
+        Button seeMoreMessage = ((Button) view.findViewById(R.id.match_more_messages));
+        seeMoreMessage.setText("See More Messages");
+        seeMoreMessage.setOnClickListener(new View.OnClickListener() {
+          public void onClick(View v) {
+            ApplicationState.setChatRoomId(chatRoomId);
+            ApplicationState.setTopicUser(matchedUserId);
+
+            Fragment chatListFragment = new ChatListFragment2();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, chatListFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+          }
+        });
+      }
 
       @Override
-      public void onClick(View v) {
+      public void onCancelled(FirebaseError firebaseError) {
       }
     });
-    */
-  }
 
+    final ImageView imageView = (ImageView) view.findViewById(R.id.match_picture);
+    new PictureLoaderTask(new BitmapRunnable() {
+      public void run() {
+        imageView.setImageBitmap(getBitmap());
+      }
+    }).execute(Utils.getProfileUrl(matchedUserId));
+  }
 }

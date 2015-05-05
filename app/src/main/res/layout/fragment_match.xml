@@ -47,12 +47,19 @@
         android:layout_marginTop="230dp">
 
     </LinearLayout>
-
+<!--
   <include layout="@layout/chat_message"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_below="@+id/name_block"
            android:layout_marginTop="25dp"/>
+-->
+  <ListView
+      android:id="@+id/chat_message"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/name_block"
+      android:layout_marginTop="25dp"/>
   <Button
     android:id="@+id/match_more_messages"
     android:layout_width="fill_parent"
