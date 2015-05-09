@@ -75,10 +75,6 @@ public class MainActivity extends FragmentActivity {
       transaction.commit();
 
       return true;
-    } else if (id == R.id.action_setting) {
-      // TODO(judy): setting;
-      System.out.println("action setting");
-      return true;
     }
 
     return super.onOptionsItemSelected(item);

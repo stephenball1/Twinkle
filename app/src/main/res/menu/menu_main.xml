@@ -3,7 +3,7 @@
       tools:context=".MainActivity">
     <item android:id="@+id/action_heart"
         android:icon="@drawable/heart"
-        android:title="Past Matches"
+        android:title="Today's Match"
         android:showAsAction="ifRoom" />
     <item android:id="@+id/circle_of_trust"
           android:icon="@drawable/chat"
@@ -11,10 +11,6 @@
           android:showAsAction="ifRoom" />
     <item android:id="@+id/action_chat"
         android:icon="@drawable/chat"
-        android:title="Circle of Trust"
-        android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_setting"
-        android:icon="@drawable/settings"
         android:title="Past Matches"
         android:showAsAction="ifRoom" />
 </menu>
