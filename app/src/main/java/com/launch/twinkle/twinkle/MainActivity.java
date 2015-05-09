@@ -7,16 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.firebase.client.Firebase;
-
 public class MainActivity extends FragmentActivity {
   private MainFragment mainFragment;
-  private Firebase firebaseRef;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     setContentView(R.layout.activity_main);
     if (savedInstanceState == null) {
       // Add the fragment on initial activity setup
@@ -41,14 +37,9 @@ public class MainActivity extends FragmentActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_heart) {
-      System.out.println("action heart");
       Fragment matchFragment = new MatchFragment();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.container, matchFragment);
@@ -60,20 +51,16 @@ public class MainActivity extends FragmentActivity {
       Fragment CircleOfTrustListFragment = new CircleOfTrustListFragment();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.container, CircleOfTrustListFragment);
-
       transaction.addToBackStack(null);
       transaction.commit();
-
       return true;
     } else if (id == R.id.action_chat) {
       getActionBar().setTitle("Circles");
       Fragment chatListFragment = new ChatListFragment2();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.container, chatListFragment);
-
       transaction.addToBackStack(null);
       transaction.commit();
-
       return true;
     }
 

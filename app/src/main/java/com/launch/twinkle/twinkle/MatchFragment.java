@@ -47,6 +47,7 @@ public class MatchFragment extends Fragment {
     view = inflater.inflate(R.layout.fragment_match, container, false);
 
     getActivity().getActionBar().setTitle("Today's Match");
+    getActivity().getActionBar().show();
 
     Button yesButton = (Button) view.findViewById(R.id.yes_button);
     yesButton.setOnClickListener(new View.OnClickListener() {

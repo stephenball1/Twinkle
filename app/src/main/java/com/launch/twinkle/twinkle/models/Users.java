@@ -4,6 +4,7 @@ import com.launch.twinkle.twinkle.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class Users {
@@ -13,11 +14,12 @@ public class Users {
   private int age;
   private String gender;
   private String profileUrl;
+  private List<String> pictures;
 
   public Users() {
   }
 
-  public Users(Map<String, Object> facebookProfile) {
+  public Users(Map<String, Object> facebookProfile, List<String> p) {
 
     firstName = (String) facebookProfile.get("first_name");
     lastName = (String) facebookProfile.get("last_name");
@@ -25,6 +27,7 @@ public class Users {
     age = calculateAge();
     gender = (String) facebookProfile.get("gender");
     profileUrl = Utils.getProfileUrl((String) facebookProfile.get("id"));
+    pictures = p;
 /*
     firstName = "Tuling";
     lastName = "Ma";
@@ -56,6 +59,10 @@ public class Users {
 
   public String getProfileUrl() {
     return profileUrl;
+  }
+
+  public List<String> getPictures() {
+    return pictures;
   }
 
   private int calculateAge() {
