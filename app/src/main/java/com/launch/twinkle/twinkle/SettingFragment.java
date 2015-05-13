@@ -15,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Switch;
@@ -163,7 +162,6 @@ public class SettingFragment extends Fragment {
                   pictures.add(getBitmap());
                   if (pictures.size() == pictureUrls.size()) {
                     pictureView.setAdapter(new MyAdapter(getActivity()));
-                    //setGridViewHeightBasedOnChildren(pictureView, 16);
                   }
                 }
               }).execute(pictureUrl);
@@ -251,32 +249,5 @@ public class SettingFragment extends Fragment {
       picture.setImageBitmap(getItem(i));
       return v;
     }
-  }
-
-  public void setGridViewHeightBasedOnChildren(GridView gridView, int columns) {
-    ListAdapter listAdapter = gridView.getAdapter();
-    if (listAdapter == null) {
-      // pre-condition
-      return;
-    }
-
-    int totalHeight = 0;
-    int items = listAdapter.getCount();
-    int rows = 0;
-
-    View listItem = listAdapter.getView(0, null, gridView);
-    listItem.measure(0, 0);
-    totalHeight = listItem.getMeasuredHeight();
-
-    float x = 1;
-    if( items > columns ){
-      x = items/columns;
-      rows = (int) (x + 1);
-      totalHeight *= rows;
-    }
-
-    ViewGroup.LayoutParams params = gridView.getLayoutParams();
-    params.height = totalHeight;
-    gridView.setLayoutParams(params);
   }
 }
