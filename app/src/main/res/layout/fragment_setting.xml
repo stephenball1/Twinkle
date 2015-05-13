@@ -1,0 +1,110 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            tools:context="com.launch.twinkle.twinkle.SettingFragment"
+    >
+<RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/settings_layout">
+    <TextView
+        android:id="@+id/select_picture_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingTop="10dp"
+        android:text="Select pictures"
+        android:layout_gravity="left|top"/>
+
+    <GridView
+        android:id="@+id/profile_picture_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/select_picture_prompt"
+        android:verticalSpacing="0dp"
+        android:horizontalSpacing="0dp"
+        android:stretchMode="columnWidth"
+        android:numColumns="4"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/profile_picture_view"
+        android:text="Description"
+        android:id="@+id/description_prompt"
+        android:paddingTop="10dp"
+        android:layout_gravity="left|bottom"/>
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description_prompt"
+        android:hint="#YOLO" />
+
+    <Switch
+        android:id="@+id/women"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Interested in women: " />
+
+    <Switch
+        android:id="@+id/men"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/women"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Interested in men: " />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/men"
+        android:text="Distance (in miles):"
+        android:paddingTop="10dp"
+        android:id="@+id/distance_preference_prompt"
+        android:layout_gravity="left|bottom"/>
+
+    <SeekBar
+        android:id="@+id/distance_preference"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/distance_preference_prompt"
+        android:max="80"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/distance_preference"
+        android:text="Age:"
+        android:id="@+id/age_preference_prompt"
+        android:layout_gravity="left|bottom"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/age_preference_container"
+        android:layout_below="@id/age_preference_prompt"
+        >
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="Save"
+        android:layout_below="@id/age_preference_container"
+        android:background="#E91E63"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+    </RelativeLayout>
+</ScrollView>

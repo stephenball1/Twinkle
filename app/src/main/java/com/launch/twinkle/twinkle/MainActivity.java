@@ -62,6 +62,14 @@ public class MainActivity extends FragmentActivity {
       transaction.addToBackStack(null);
       transaction.commit();
       return true;
+    } else if (id == R.id.action_setting) {
+      getActionBar().setTitle("Settings");
+      Fragment settingFragment = new SettingFragment();
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(R.id.container, settingFragment);
+      transaction.addToBackStack(null);
+      transaction.commit();
+      return true;
     }
 
     return super.onOptionsItemSelected(item);

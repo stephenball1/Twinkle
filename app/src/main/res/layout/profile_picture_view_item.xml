@@ -10,8 +10,8 @@
         android:scaleType="centerCrop"/>
     <ImageView android:id="@+id/selected"
         android:scaleType="fitXY"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="top|right"
         android:src="@drawable/checkbox_marked_circle_j"/>
 </FrameLayout>

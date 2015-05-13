@@ -15,6 +15,12 @@ public class Users {
   private String gender;
   private String profileUrl;
   private List<String> pictures;
+  private String description;
+  private int agePreferenceLow;
+  private int agePreferenceHigh;
+  private int distancePreferenceMiles;
+  private boolean interestedInWomen;
+  private boolean interestedInMen;
 
   public Users() {
   }
@@ -28,6 +34,20 @@ public class Users {
     gender = (String) facebookProfile.get("gender");
     profileUrl = Utils.getProfileUrl((String) facebookProfile.get("id"));
     pictures = p;
+    description = "";
+    agePreferenceLow = age - 10;
+    agePreferenceHigh = age + 20;
+    distancePreferenceMiles = 20;
+    if (gender.equals("male")) {
+      interestedInWomen = true;
+      interestedInMen = false;
+    } else if (gender.equals("female")) {
+      interestedInWomen = false;
+      interestedInMen = true;
+    } else {
+      interestedInWomen = true;
+      interestedInMen = true;
+    }
 /*
     firstName = "Tuling";
     lastName = "Ma";
@@ -63,6 +83,58 @@ public class Users {
 
   public List<String> getPictures() {
     return pictures;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String d) {
+    description = d;
+  }
+
+  public void setPictures(List<String> p) {
+    pictures = p;
+  }
+
+  public int getAgePreferenceLow() {
+    return agePreferenceLow;
+  }
+
+  public void setAgePreferenceLow(int agePreferenceLow) {
+    this.agePreferenceLow = agePreferenceLow;
+  }
+
+  public int getAgePreferenceHigh() {
+    return agePreferenceHigh;
+  }
+
+  public void setAgePreferenceHigh(int agePreferenceHigh) {
+    this.agePreferenceHigh = agePreferenceHigh;
+  }
+
+  public int getDistancePreferenceMiles() {
+    return distancePreferenceMiles;
+  }
+
+  public void setDistancePreferenceMiles(int distancePreferenceMiles) {
+    this.distancePreferenceMiles = distancePreferenceMiles;
+  }
+
+  public boolean isInterestedInWomen() {
+    return interestedInWomen;
+  }
+
+  public void setInterestedInWomen(boolean interestedInWomen) {
+    this.interestedInWomen = interestedInWomen;
+  }
+
+  public boolean isInterestedInMen() {
+    return interestedInMen;
+  }
+
+  public void setInterestedInMen(boolean interestedInMen) {
+    this.interestedInMen = interestedInMen;
   }
 
   private int calculateAge() {
