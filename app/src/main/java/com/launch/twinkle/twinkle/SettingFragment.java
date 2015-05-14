@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,17 @@ public class SettingFragment extends Fragment {
       }
     });
 
+    Button circleOfTrustButton = (Button) view.findViewById(R.id.invite_friend_button);
+    circleOfTrustButton.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        Fragment pickCircleOfTrustFragment = new PickCircleOfTrust();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, pickCircleOfTrustFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+      }
+    });
+
     distancePreferenceBar = ((SeekBar) view.findViewById(R.id.distance_preference));
     distancePreferenceBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
       int progress = 0;
@@ -152,9 +164,9 @@ public class SettingFragment extends Fragment {
           @Override
           public void onDataChange(DataSnapshot snapshot) {
             user = snapshot.getValue(Users.class);
-            pictureUrls = user.getPictures();
-            //pictureUrls.add(user.getPictures().get(0));
-            //pictureUrls.add(user.getPictures().get(1));
+            //pictureUrls = user.getPictures();
+            pictureUrls.add(user.getPictures().get(0));
+            pictureUrls.add(user.getPictures().get(1));
             selectedUrls = new ArrayList<String>(pictureUrls);
             for (final String pictureUrl : pictureUrls) {
               new PictureLoaderTask(new BitmapRunnable() {

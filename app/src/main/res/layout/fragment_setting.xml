@@ -95,16 +95,30 @@
         >
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:gravity="center"
-        android:text="Save"
         android:layout_below="@id/age_preference_container"
-        android:background="#E91E63"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
-    </RelativeLayout>
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/invite_friend_button"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Circle Of Trust"
+            android:background="#B8B8B8"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Save"
+            android:background="#E91E63"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        </LinearLayout>
+</RelativeLayout>
 </ScrollView>
