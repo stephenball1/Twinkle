@@ -6,22 +6,32 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.launch.twinkle.twinkle.models.FirebaseRef;
+import com.launch.twinkle.twinkle.models.Users;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Match fragment runs assume there is a job that update the matchId for each user everyday.
 public class PickCircleOfTrust extends Fragment {
@@ -169,6 +179,28 @@ public class PickCircleOfTrust extends Fragment {
       @Override
       public void afterTextChanged(Editable s) {
 
+      }
+    });
+
+    ((Button) view.findViewById(R.id.send_invite)).setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage("4086279246", null, "Download Circl here!", null, null);
+        Toast.makeText(getActivity(), "Invite send", Toast.LENGTH_SHORT).show();
+        firebase.child("user/" + ApplicationState.getLoggedInUserId()).addListenerForSingleValueEvent(
+            new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                List<String> friendInvite =  user.getFriendInvite();
+                friendInvite.addAll(friends);
+                new FirebaseRef().storeUser(user);
+              }
+              @Override
+              public void onCancelled(FirebaseError firebaseError) {
+              }
+            });
       }
     });
     return view;

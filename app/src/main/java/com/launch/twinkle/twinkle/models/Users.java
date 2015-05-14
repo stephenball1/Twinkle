@@ -3,6 +3,7 @@ package com.launch.twinkle.twinkle.models;
 import com.launch.twinkle.twinkle.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ public class Users {
   private int distancePreferenceMiles;
   private boolean interestedInWomen;
   private boolean interestedInMen;
+  private List<String> friendInvite;
+  private List<String> friends;
 
   public Users() {
   }
@@ -48,6 +51,10 @@ public class Users {
       interestedInWomen = true;
       interestedInMen = true;
     }
+    friendInvite = new ArrayList<String>();
+    friendInvite.add("");
+    friends = new ArrayList<String>();
+    friends.add("");
 /*
     firstName = "Tuling";
     lastName = "Ma";
@@ -135,6 +142,22 @@ public class Users {
 
   public void setInterestedInMen(boolean interestedInMen) {
     this.interestedInMen = interestedInMen;
+  }
+
+  public List<String> getFriendInvite() {
+    return friendInvite;
+  }
+
+  public void setFriendInvite(List<String> friendInvite) {
+    this.friendInvite = friendInvite;
+  }
+
+  public List<String> getFriends() {
+    return friends;
+  }
+
+  public void setFriends(List<String> friends) {
+    this.friends = friends;
   }
 
   private int calculateAge() {

@@ -5,12 +5,26 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical">
-    <TextView
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New friends"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        />
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="New friends"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_weight="2"
+            />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Send invite"
+            android:id="@+id/send_invite"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_weight="2"/>
+        </LinearLayout>
+
 
     <ListView
         android:layout_height="wrap_content"
