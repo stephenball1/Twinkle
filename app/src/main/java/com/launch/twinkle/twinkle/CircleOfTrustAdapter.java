@@ -3,6 +3,7 @@ package com.launch.twinkle.twinkle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -11,6 +12,7 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.launch.twinkle.twinkle.models.ChatSummary;
 import com.launch.twinkle.twinkle.models.CircleOfTrustChatId;
+import com.launch.twinkle.twinkle.models.Users;
 
 /**
  * @author greg
@@ -27,16 +29,16 @@ public class CircleOfTrustAdapter extends FirebaseListAdapter2<CircleOfTrustChat
   public CircleOfTrustAdapter(Query ref, Activity activity, int layout, String mUsername) {
     super(ref, CircleOfTrustChatId.class, layout, activity);
     this.mUsername = mUsername;
-    this.firebase = new Firebase(Constants.FIREBASE_URL).child("circleOfTrustChat");
+    this.firebase = new Firebase(Constants.FIREBASE_URL);
 
   }
 
   @Override
   protected void populateView(View view, CircleOfTrustChatId chatId) {
     final View finalView = view;
-    firebase.child(chatId.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+    firebase.child("circleOfTrustChat/" + chatId.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
-      public void onDataChange(DataSnapshot snapshot) {
+      public void onDataChange(final DataSnapshot snapshot) {
         ChatSummary chatSummary = snapshot.getValue(ChatSummary.class);
         // TODO(judymou): populate name
         new PictureLoaderTask(new BitmapRunnable() {
@@ -50,6 +52,19 @@ public class CircleOfTrustAdapter extends FirebaseListAdapter2<CircleOfTrustChat
             ((ImageView) finalView.findViewById(R.id.initial_profile_picture)).setImageBitmap(getBitmap());
           }
         }).execute(Utils.getProfileUrl(chatSummary.getFriend()));
+
+        firebase.child("user/" + chatSummary.getFriendMatch()).addListenerForSingleValueEvent(new ValueEventListener() {
+          @Override
+          public void onDataChange(DataSnapshot dataSnapshot) {
+            Users user = dataSnapshot.getValue(Users.class);
+            ((TextView) finalView.findViewById(R.id.message)).setText(user.getFirstName());
+          }
+
+          @Override
+          public void onCancelled(FirebaseError firebaseError) {
+
+          }
+        });
       }
 
       @Override
