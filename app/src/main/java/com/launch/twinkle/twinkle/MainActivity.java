@@ -55,10 +55,10 @@ public class MainActivity extends FragmentActivity {
       transaction.commit();
       return true;
     } else if (id == R.id.action_chat) {
-      getActionBar().setTitle("Circles");
-      Fragment chatListFragment = new ChatListFragment2();
+      getActionBar().setTitle("Past Matches");
+      Fragment pastMatchChatListFragment = new PastMatchChatListFragment();
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      transaction.replace(R.id.container, chatListFragment);
+      transaction.replace(R.id.container, pastMatchChatListFragment);
       transaction.addToBackStack(null);
       transaction.commit();
       return true;
